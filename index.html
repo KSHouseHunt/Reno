@@ -1,0 +1,2426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Reno Hub — Renovation Budget & Deal Watchlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Light, misty Scandinavian surfaces — 70% pale neutral / 20% soft tint / 10% deep accent */
+  --bg:#E9ECE7;
+  --bg-soft:#F1F3EC;
+  --panel:#F1F3EC;
+  --card:#F8F8F2;
+  --card-2:#FCFBF6;
+  --card-3:#F0F2EA;
+  --line:#D6DCD5;
+  --line-soft:#E1E6DF;
+  --ink:#24352D;
+  --ink-dim:#55645B;
+  --ink-faint:#6F7B72;
+  --petrol:#34697A;
+  --petrol-soft:#5E8B99;
+  --petrol-bright:#2E6779;
+  --forest:#48695C;
+  --forest-bright:#6B8F7D;
+  --sage:#7FA08C;
+  --sage-dim:#9DB4A6;
+  --slate:#5F7386;
+  --info:#3E6284;
+  --amber:#8A6528;
+  --amber-dim:#C9A468;
+  --red:#A35252;
+  --red-dim:#C08A8A;
+  --grey:#8A949B;
+  --on-accent:#F7F5EE;
+  --radius:18px;
+  --radius-sm:12px;
+  --shadow:0 12px 28px rgba(43,62,56,.12), 0 2px 6px rgba(43,62,56,.08);
+  --shadow-soft:0 4px 14px rgba(43,62,56,.07);
+  --font-display:"Fraunces",Georgia,serif;
+  --font-body:"Figtree",-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(1100px 560px at 88% -8%, rgba(52,105,122,.08), transparent 60%),
+    radial-gradient(900px 520px at -8% 22%, rgba(127,160,140,.12), transparent 55%),
+    var(--bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.55;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:var(--font-body);cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:var(--font-body);font-size:14px;color:var(--ink);background:#FFFFFF;border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:100%;outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--petrol);box-shadow:0 0 0 3px rgba(52,105,122,.12)}
+input[type=date]{color-scheme:light}
+::placeholder{color:#9AA69D}
+a{color:var(--petrol-bright);text-decoration:none}
+:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ---------- Layout ---------- */
+.app{max-width:1240px;margin:0 auto;padding:28px 24px 120px}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.brand h1{font-family:var(--font-display);font-weight:500;font-size:30px;letter-spacing:.2px;color:var(--forest)}
+.brand .sub{color:var(--ink-faint);font-size:13.5px;margin-top:2px}
+.top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search-wrap{position:relative}
+.search-wrap input{width:250px;padding-left:34px;border-radius:999px;background:#FFFFFF}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.45}
+
+nav.tabs{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line-soft);border-radius:999px;padding:5px;width:max-content;margin-bottom:26px;max-width:100%;overflow-x:auto}
+nav.tabs button{padding:8px 18px;border-radius:999px;color:var(--ink-dim);font-weight:600;font-size:14px;white-space:nowrap;transition:background .15s,color .15s}
+nav.tabs button.active{background:var(--forest);color:var(--on-accent)}
+nav.tabs button:hover:not(.active){color:var(--ink);background:rgba(127,160,140,.15)}
+
+.grid{display:grid;gap:16px}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.grid.cols-4{grid-template-columns:repeat(4,1fr)}
+.grid.cols-2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:980px){.grid.cols-3,.grid.cols-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.grid.cols-3,.grid.cols-4,.grid.cols-2{grid-template-columns:1fr}.app{padding:20px 14px 120px}.search-wrap input{width:100%}}
+
+/* ---------- Cards ---------- */
+.card{background:linear-gradient(180deg,var(--card-2),var(--card));border:1px solid var(--line-soft);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-soft)}
+.card.hero{box-shadow:var(--shadow);background:linear-gradient(180deg,#FDFCF8,#F6F7F0)}
+.card h2{font-family:var(--font-display);font-weight:500;font-size:19px;margin-bottom:4px;color:var(--forest)}
+.card h3{font-family:var(--font-display);font-weight:500;font-size:16.5px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint)}
+.big-num{font-family:var(--font-display);font-size:30px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:.2px}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-dim)}
+.faint{color:var(--ink-faint)}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:30px 0 14px;flex-wrap:wrap}
+.section-title h2{font-family:var(--font-display);font-weight:500;font-size:21px;color:var(--forest)}
+.section-title .hint{font-size:13px;color:var(--ink-faint)}
+.section-title .right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* ---------- Hero budget ---------- */
+.hero-grid{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.ring-wrap{position:relative;width:172px;height:172px;flex:none}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-bg{stroke:#DEE3DC;fill:none}
+.ring-fg{fill:none;stroke:url(#ringGrad);stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.22,1,.36,1)}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.ring-center .pct{font-family:var(--font-display);font-size:30px;font-weight:500;color:var(--forest)}
+.ring-center .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)}
+.hero-stats{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:18px 26px}
+@media(max-width:640px){.hero-stats{grid-template-columns:repeat(2,1fr)}}
+.hstat .lbl{font-size:12px;color:var(--ink-faint);margin-bottom:2px}
+.hstat .val{font-family:var(--font-display);font-size:21px;font-weight:500;font-variant-numeric:tabular-nums}
+.hstat .val.pos{color:var(--forest)}
+.hstat .val.warn{color:var(--amber)}
+.hstat .val.crit{color:var(--red)}
+
+/* The Vault — protected buffer */
+.vault{flex:none;background:repeating-linear-gradient(-45deg,rgba(138,101,40,.07) 0 8px,rgba(138,101,40,.02) 8px 16px),#F6F7F0;border:1px solid var(--amber-dim);border-radius:16px;padding:16px 18px;min-width:190px;position:relative;overflow:hidden}
+.vault.intact{border-color:var(--line);background:repeating-linear-gradient(-45deg,rgba(127,160,140,.10) 0 8px,rgba(127,160,140,.03) 8px 16px),#F6F7F0}
+.vault .lock{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
+.vault .amt{font-family:var(--font-display);font-size:23px;font-variant-numeric:tabular-nums;color:var(--forest)}
+.vault .note{font-size:12px;color:var(--ink-faint);margin-top:3px}
+.vault.breached{border-color:var(--red-dim)}
+.vault.breached .amt{color:var(--red)}
+.vault.touched .amt{color:var(--amber)}
+.vault.touched{border-color:var(--amber-dim)}
+
+/* ---------- Progress bars ---------- */
+.bar{height:8px;background:#E1E6DF;border-radius:99px;overflow:hidden;position:relative}
+.bar > i{display:block;height:100%;border-radius:99px;transition:width .7s cubic-bezier(.22,1,.36,1)}
+.bar > i.spent{background:linear-gradient(90deg,var(--forest),#7FA08C)}
+.bar > i.committed{position:absolute;top:0;background:rgba(52,105,122,.30)}
+.cat-card .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.cat-card .cat-name{font-family:var(--font-display);font-size:16px;font-weight:500;line-height:1.3}
+.cat-card .figures{display:flex;gap:18px;margin:12px 0 10px;flex-wrap:wrap}
+.cat-card .figures div{font-size:12.5px;color:var(--ink-faint)}
+.cat-card .figures b{display:block;font-size:15px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.cat-card .figures b.pos{color:var(--forest)}
+.cat-card .figures b.neg{color:var(--red)}
+
+/* ---------- Stat widgets ---------- */
+.stat-card{padding:16px 18px}
+.stat-card .lbl{font-size:12px;color:var(--ink-faint)}
+.stat-card .val{font-family:var(--font-display);font-size:22px;font-weight:500;margin-top:2px;font-variant-numeric:tabular-nums;color:var(--petrol-bright)}
+.stat-card .sub{font-size:12px;color:var(--ink-faint);margin-top:2px}
+
+/* ---------- Chips & badges ---------- */
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+.chip.status-watching{background:rgba(62,98,132,.12);color:var(--info);border-color:rgba(62,98,132,.28)}
+.chip.status-waiting{background:rgba(95,115,134,.11);color:var(--slate);border-color:rgba(95,115,134,.26)}
+.chip.status-great{background:rgba(72,105,92,.11);color:var(--forest);border-color:rgba(72,105,92,.26)}
+.chip.status-buy{background:rgba(72,105,92,.16);color:#3E6254;border-color:rgba(72,105,92,.34)}
+.chip.status-ordered{background:rgba(52,105,122,.12);color:var(--petrol-bright);border-color:rgba(52,105,122,.28)}
+.chip.status-purchased{background:rgba(72,105,92,.14);color:var(--forest);border-color:rgba(72,105,92,.3)}
+.chip.status-wishlist{background:rgba(52,105,122,.09);color:var(--petrol);border-color:rgba(52,105,122,.24)}
+.chip.status-cancelled,.chip.status-archived{background:rgba(120,130,138,.12);color:#6E7A82;border-color:rgba(120,130,138,.26)}
+.chip.status-delivered{background:rgba(62,98,132,.11);color:var(--info);border-color:rgba(62,98,132,.26)}
+.chip.status-installed{background:rgba(72,105,92,.18);color:#3E6254;border-color:rgba(72,105,92,.36)}
+.chip.expiry-ok{background:rgba(72,105,92,.10);color:var(--forest);border-color:rgba(72,105,92,.24)}
+.chip.expiry-soon{background:rgba(138,101,40,.12);color:var(--amber);border-color:rgba(138,101,40,.3)}
+.chip.expiry-today{background:rgba(163,82,82,.12);color:var(--red);border-color:rgba(163,82,82,.3)}
+.chip.expiry-expired{background:rgba(120,130,138,.12);color:#6E7A82;border-color:rgba(120,130,138,.26)}
+.chip.prio-High{background:rgba(163,82,82,.11);color:var(--red);border-color:rgba(163,82,82,.26)}
+.chip.prio-Medium{background:rgba(138,101,40,.11);color:var(--amber);border-color:rgba(138,101,40,.26)}
+.chip.prio-Low{background:rgba(95,115,134,.11);color:var(--slate);border-color:rgba(95,115,134,.26)}
+.badge-discount{font-weight:700;color:var(--forest);font-variant-numeric:tabular-nums}
+.badge-target{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--forest)}
+
+.deal-score{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600}
+.deal-score .dot{width:8px;height:8px;border-radius:50%}
+.score-excellent .dot{background:var(--forest)} .score-excellent{color:var(--forest)}
+.score-good .dot{background:#557E68} .score-good{color:#557E68}
+.score-average .dot{background:var(--amber)} .score-average{color:var(--amber)}
+.score-poor .dot{background:var(--grey)} .score-poor{color:#77828A}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:13.5px;padding:9px 16px;border-radius:11px;border:1px solid var(--line);background:#FFFFFF;color:var(--ink);transition:background .15s,border-color .15s,transform .06s}
+.btn:hover{background:var(--card-3);border-color:var(--slate)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:linear-gradient(135deg,var(--petrol),#2B5A69);border-color:rgba(52,105,122,.5);color:var(--on-accent)}
+.btn.primary:hover{background:linear-gradient(135deg,#3B7488,#316375)}
+.btn.green{background:linear-gradient(135deg,var(--forest),#5C8272);border-color:rgba(72,105,92,.5);color:var(--on-accent)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--ink-dim)}
+.btn.ghost:hover{color:var(--ink);background:rgba(127,160,140,.14)}
+.btn.danger{color:var(--red);border-color:rgba(163,82,82,.32)}
+.btn.sm{padding:6px 11px;font-size:12.5px;border-radius:9px}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:#FFFFFF;color:var(--ink-dim);transition:all .15s}
+.icon-btn:hover{color:var(--ink);border-color:var(--slate);background:var(--card-3)}
+
+.fab{position:fixed;right:26px;bottom:26px;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--petrol),var(--forest));color:var(--on-accent);font-size:26px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(43,62,56,.28),0 0 0 1px rgba(72,105,92,.2);transition:transform .15s;z-index:60}
+.fab:hover{transform:scale(1.06)}
+
+/* ---------- Watch cards ---------- */
+.watch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px}
+.watch-card{display:flex;flex-direction:column;overflow:hidden;padding:0;transition:transform .15s,box-shadow .15s;position:relative}
+.watch-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.watch-card.target-hit{border-color:rgba(72,105,92,.45);box-shadow:0 0 0 1px rgba(72,105,92,.2),var(--shadow-soft)}
+.watch-img{height:158px;background:#EEF1EA;display:flex;align-items:center;justify-content:center;overflow:hidden;border-bottom:1px solid var(--line-soft)}
+.watch-img img{width:100%;height:100%;object-fit:cover}
+.watch-img .ph{color:#9AA69D;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.watch-body{padding:16px 18px 14px;display:flex;flex-direction:column;gap:10px;flex:1}
+.watch-body .name{font-family:var(--font-display);font-size:16.5px;font-weight:500;line-height:1.3}
+.watch-meta{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--ink-faint)}
+.watch-meta span{background:var(--bg-soft);border:1px solid var(--line-soft);padding:2px 8px;border-radius:6px}
+.price-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.price-row .current{font-family:var(--font-display);font-size:21px;font-weight:500;font-variant-numeric:tabular-nums;color:var(--petrol-bright)}
+.price-row .orig{font-size:13px;color:var(--ink-faint);text-decoration:line-through;font-variant-numeric:tabular-nums}
+.target-row{font-size:12.5px;color:var(--ink-dim);font-variant-numeric:tabular-nums}
+.watch-chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.watch-actions{display:flex;gap:6px;padding:10px 14px;border-top:1px solid var(--line-soft);background:rgba(127,160,140,.10);flex-wrap:wrap}
+.watch-actions .spacer{flex:1}
+
+/* ---------- Table ---------- */
+.table-wrap{overflow-x:auto;border:1px solid var(--line-soft);border-radius:var(--radius);background:linear-gradient(180deg,var(--card-2),var(--card));box-shadow:var(--shadow-soft)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:1040px}
+th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+th:hover{color:var(--ink-dim)}
+th .arrow{opacity:.7;font-size:10px}
+td{padding:12px 14px;border-bottom:1px solid var(--line-soft);vertical-align:middle;font-variant-numeric:tabular-nums}
+tbody tr{transition:background .12s;cursor:pointer}
+tbody tr:hover{background:rgba(52,105,122,.05)}
+tbody tr:last-child td{border-bottom:none}
+td .item-name{font-weight:600}
+td .item-sub{font-size:12px;color:var(--ink-faint)}
+td .pay-cell{font-size:12.5px;white-space:nowrap}
+td .pay-cell .out{color:var(--amber);font-weight:600}
+.saved-pos{color:var(--forest);font-weight:600}
+.saved-neg{color:var(--red)}
+
+/* ---------- Filters ---------- */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.filter-bar select,.filter-bar input{width:auto;min-width:130px;background:#FFFFFF}
+.filter-bar .count{font-size:13px;color:var(--ink-faint);margin-left:auto}
+
+/* ---------- Timeline ---------- */
+.tl-group{margin-bottom:26px}
+.tl-group h3{font-family:var(--font-display);font-weight:500;font-size:17px;margin-bottom:10px;display:flex;align-items:center;gap:10px;color:var(--forest)}
+.tl-group h3 .cnt{font-family:var(--font-body);font-size:12px;color:var(--ink-faint);font-weight:600}
+.tl-item{display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,var(--card-2),var(--card));border:1px solid var(--line-soft);border-radius:14px;padding:12px 16px;margin-bottom:8px;transition:border-color .15s,box-shadow .15s;box-shadow:var(--shadow-soft)}
+.tl-item:hover{border-color:var(--sage);box-shadow:var(--shadow)}
+.tl-item .thumb{width:44px;height:44px;border-radius:10px;background:#EEF1EA;overflow:hidden;flex:none;display:flex;align-items:center;justify-content:center;color:#9AA69D;font-size:16px}
+.tl-item .thumb img{width:100%;height:100%;object-fit:cover}
+.tl-item .info{flex:1;min-width:0}
+.tl-item .info .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-item .info .st{font-size:12px;color:var(--ink-faint)}
+.tl-item .right{text-align:right;flex:none}
+.tl-rail{border-left:2px solid var(--line);margin-left:8px;padding-left:22px}
+.tl-month{position:relative;margin-bottom:22px}
+.tl-month::before{content:"";position:absolute;left:-28px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--petrol);box-shadow:0 0 0 4px rgba(52,105,122,.14)}
+.tl-month h3{font-family:var(--font-display);font-weight:500;font-size:16px;margin-bottom:8px;color:var(--forest)}
+.tl-month .mo-total{font-size:12.5px;color:var(--ink-faint)}
+
+/* ---------- Best deals ---------- */
+.deal-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+.deal-row:last-child{border-bottom:none}
+.deal-row .rank{font-family:var(--font-display);font-size:16px;color:var(--ink-faint);width:20px;flex:none}
+.deal-row .thumb{width:40px;height:40px;border-radius:9px;background:#EEF1EA;overflow:hidden;flex:none;display:flex;align-items:center;justify-content:center;color:#9AA69D}
+.deal-row .thumb img{width:100%;height:100%;object-fit:cover}
+.deal-row .nm{flex:1;min-width:0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deal-row .nm small{display:block;font-weight:400;font-size:12px;color:var(--ink-faint)}
+.deal-row .sv{text-align:right;flex:none}
+.deal-row .sv b{color:var(--forest)}
+
+/* ---------- Payment summary ---------- */
+.pay-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:10px}
+@media(max-width:980px){.pay-grid{grid-template-columns:repeat(2,1fr)}}
+.pay-grid .pstat{background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:12px;padding:12px 14px}
+.pay-grid .pstat .lbl{font-size:11.5px;color:var(--ink-faint)}
+.pay-grid .pstat .val{font-family:var(--font-display);font-size:18px;margin-top:2px;font-variant-numeric:tabular-nums}
+.pay-grid .pstat .val.warn{color:var(--amber)}
+
+/* ---------- Payment details in form ---------- */
+details.pay-details{grid-column:1/-1;background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:12px;padding:12px 14px}
+details.pay-details summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--petrol-bright);list-style-position:inside}
+details.pay-details .inner{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){details.pay-details .inner{grid-template-columns:1fr}}
+.part-row{display:grid;grid-template-columns:1.1fr 1.1fr .8fr .9fr auto;gap:8px;align-items:center;margin-bottom:8px}
+@media(max-width:640px){.part-row{grid-template-columns:1fr 1fr}}
+.parts-warning{font-size:12.5px;color:var(--amber);font-weight:600;margin-top:4px}
+
+/* ---------- Needs list ---------- */
+.quick-need{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 16px}
+.quick-need input#needName{flex:2;min-width:220px}
+.quick-need select{width:auto;min-width:170px;max-width:280px}
+.quick-need input#needRoom{width:auto;min-width:140px;flex:0 1 170px}
+@media(max-width:640px){.quick-need input#needName,.quick-need select,.quick-need input#needRoom,.quick-need .btn{flex:1 1 100%;width:100%;max-width:none}}
+.need-row{gap:12px}
+.need-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--sage);background:#FFFFFF;flex:none;cursor:pointer;position:relative;transition:background .15s,border-color .15s}
+.need-check:hover,.need-check:focus-visible{background:var(--forest);border-color:var(--forest)}
+.need-check:hover::after,.need-check:focus-visible::after{content:"✓";color:var(--on-accent);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+
+/* ---------- Modal ---------- */
+.modal-backdrop{position:fixed;inset:0;background:rgba(38,52,47,.38);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px 16px;z-index:100;overflow-y:auto;animation:fadeIn .18s ease}
+.modal{background:linear-gradient(180deg,#FDFCF8,#F6F7F0);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);width:100%;max-width:640px;padding:26px 28px;animation:slideUp .22s cubic-bezier(.22,1,.36,1)}
+.modal.narrow{max-width:440px}
+.modal h2{font-family:var(--font-display);font-weight:500;font-size:21px;margin-bottom:18px;color:var(--forest)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px 14px}
+.form-grid .full{grid-column:1/-1}
+@media(max-width:560px){.form-grid{grid-template-columns:1fr}}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--ink-dim);margin-bottom:5px}
+.field .opt{font-weight:400;color:var(--ink-faint)}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+.modal-actions .left{margin-right:auto}
+.img-preview{margin-top:8px;height:90px;border-radius:10px;overflow:hidden;background:var(--bg-soft);border:1px solid var(--line-soft);display:none}
+.img-preview img{width:100%;height:100%;object-fit:cover}
+.budget-totals{background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:13.5px}
+.budget-totals .row{display:flex;justify-content:space-between;padding:2px 0}
+.budget-totals b{font-variant-numeric:tabular-nums;color:var(--forest)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ---------- Toast ---------- */
+.toast-wrap{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{background:#FFFFFF;border:1px solid var(--line);color:var(--ink);padding:11px 20px;border-radius:12px;font-size:13.5px;font-weight:600;box-shadow:var(--shadow);animation:slideUp .2s ease}
+.toast.ok{border-color:rgba(72,105,92,.4)}
+.toast.warn{border-color:rgba(138,101,40,.45)}
+
+/* ---------- Backup pill ---------- */
+.backup-pill{font-size:12px;font-weight:600;color:var(--ink-faint);background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:999px;padding:6px 12px;cursor:pointer;transition:all .15s}
+.backup-pill:hover{color:var(--ink);border-color:var(--slate)}
+.backup-pill.stale{color:var(--amber);border-color:var(--amber-dim);background:rgba(138,101,40,.08)}
+
+/* ---------- House ---------- */
+.kv{margin-top:8px}
+.kv-row{display:flex;justify-content:space-between;gap:14px;padding:5px 0;border-bottom:1px solid var(--line-soft);font-size:13px}
+.kv-row:last-child{border-bottom:none}
+.kv-row span{color:var(--ink-dim)}
+.kv-row b{font-weight:600;text-align:right}
+.area-row{display:grid;grid-template-columns:1.3fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center}
+@media(max-width:560px){.area-row{grid-template-columns:1fr 1fr auto}}
+
+/* ---------- Themes ---------- */
+.grad-a{stop-color:#7FA08C}
+.grad-b{stop-color:#6E96A3}
+:root[data-theme="blue"]{--forest:#4A6478;--forest-bright:#7690A3;--sage:#8CA1B3;--sage-dim:#A9BAC7}
+[data-theme="blue"] .grad-a{stop-color:#8CA1B3}
+[data-theme="blue"] .grad-b{stop-color:#7FA0AD}
+[data-theme="blue"] .bar > i.spent{background:linear-gradient(90deg,#4A6478,#8CA1B3)}
+[data-theme="blue"] .btn.green{background:linear-gradient(135deg,#4A6478,#5F7C90);border-color:rgba(74,100,120,.5)}
+[data-theme="blue"] .fab{background:linear-gradient(135deg,#34697A,#4A6478)}
+[data-theme="blue"] .chip.status-buy{background:rgba(74,100,120,.16);color:#3B586E;border-color:rgba(74,100,120,.34)}
+[data-theme="blue"] .chip.status-great,[data-theme="blue"] .chip.status-purchased,[data-theme="blue"] .chip.expiry-ok{background:rgba(74,100,120,.11);color:#4A6478;border-color:rgba(74,100,120,.26)}
+[data-theme="blue"] .chip.status-installed{background:rgba(74,100,120,.18);color:#3B586E;border-color:rgba(74,100,120,.36)}
+[data-theme="blue"] .score-good{color:#5E7A8C}
+[data-theme="blue"] .score-good .dot{background:#5E7A8C}
+[data-theme="blue"] .score-excellent{color:#4A6478}
+[data-theme="blue"] .score-excellent .dot{background:#4A6478}
+[data-theme="blue"] .watch-card.target-hit{border-color:rgba(74,100,120,.45);box-shadow:0 0 0 1px rgba(74,100,120,.2),var(--shadow-soft)}
+[data-theme="blue"] .need-check:hover,[data-theme="blue"] .need-check:focus-visible{background:#4A6478;border-color:#4A6478}
+[data-theme="blue"] .badge-discount,[data-theme="blue"] .badge-target,[data-theme="blue"] .saved-pos,[data-theme="blue"] .deal-row .sv b{color:#4A6478}
+[data-theme="blue"] .toast.ok{border-color:rgba(74,100,120,.4)}
+.theme-swatch{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:12px;border:2px solid var(--line);background:#FFFFFF;font-weight:600;font-size:13.5px;cursor:pointer;transition:border-color .15s}
+.theme-swatch.active{border-color:var(--forest)}
+.theme-swatch .sw{width:34px;height:18px;border-radius:6px}
+.admin-chip{display:inline-flex;align-items:center;gap:6px;background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:999px;padding:4px 6px 4px 12px;font-size:12.5px;font-weight:600;margin:0 6px 8px 0}
+.admin-chip button{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-faint);background:transparent}
+.admin-chip button:hover{background:rgba(163,82,82,.14);color:var(--red)}
+.admin-add{display:flex;gap:8px;margin-top:10px}
+.admin-add input{flex:1}
+
+/* ---------- Empty states ---------- */
+.empty{text-align:center;padding:52px 20px;color:var(--ink-faint)}
+.empty .big{font-family:var(--font-display);font-size:19px;color:var(--ink-dim);margin-bottom:6px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header class="top">
+  <div class="brand">
+    <h1>Reno Hub</h1>
+    <div class="sub">Renovation budget &amp; deal watchlist</div>
+  </div>
+  <div class="top-actions">
+    <button class="btn ghost sm" id="btnMeasure" title="Room measurements">📏 Rooms</button>
+    <button class="btn green sm" id="btnAddPurchase">+ Add purchase</button>
+    <button class="btn sm" id="btnAddWatch">+ Watch a deal</button>
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="globalSearch" type="search" placeholder="Search items, stores, rooms…" aria-label="Global search">
+    </div>
+    <button class="backup-pill" id="fileStatus" style="display:none" title="Data file"></button>
+    <button class="backup-pill" id="backupStatus" title="Click to export a backup now"></button>
+    <button class="btn ghost" id="btnExport">Export JSON</button>
+    <button class="btn ghost" id="btnImport">Import</button>
+    <input type="file" id="importFile" accept="application/json" class="hidden">
+  </div>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button data-tab="dashboard" class="active">Dashboard</button>
+  <button data-tab="needs">Needs</button>
+  <button data-tab="watchlist">Watchlist</button>
+  <button data-tab="purchases">Purchases</button>
+  <button data-tab="timeline">Timeline</button>
+  <button data-tab="house">House</button>
+  <button data-tab="admin">Admin</button>
+</nav>
+
+<!-- ================= DASHBOARD ================= -->
+<section id="tab-dashboard">
+  <div class="card hero">
+    <div class="hero-grid">
+      <div class="ring-wrap">
+        <svg width="172" height="172" viewBox="0 0 172 172">
+          <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop class="grad-a" offset="0%"/><stop class="grad-b" offset="100%"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-bg" cx="86" cy="86" r="76" stroke-width="12"/>
+          <circle class="ring-fg" id="ringSpent" cx="86" cy="86" r="76" stroke-width="12" stroke-dasharray="477.5" stroke-dashoffset="477.5"/>
+        </svg>
+        <div class="ring-center">
+          <div class="pct num" id="ringPct">0%</div>
+          <div class="lbl" id="ringLbl">of active budget</div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="lbl">Total available</div><div class="val num" id="stAvailable">650 000 kr</div></div>
+        <div class="hstat"><div class="lbl">Spent</div><div class="val num" id="stSpent">0 kr</div></div>
+        <div class="hstat"><div class="lbl">Committed</div><div class="val num" id="stCommitted">0 kr</div></div>
+        <div class="hstat"><div class="lbl">Remaining (active)</div><div class="val num pos" id="stRemaining">500 000 kr</div></div>
+        <div class="hstat"><div class="lbl">Projected remaining</div><div class="val num" id="stProjected">650 000 kr</div></div>
+        <div class="hstat"><div class="lbl">Total saved on deals</div><div class="val num pos" id="stSaved">0 kr</div></div>
+      </div>
+      <div class="vault intact" id="vaultCard">
+        <div class="lock"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Protected buffer</div>
+        <div class="amt num" id="vaultAmt">150 000 kr</div>
+        <div class="note" id="vaultNote">Untouched — spending draws on the active budget first.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="measureBanner"></div>
+
+  <div class="section-title"><h2>Budget areas</h2><div class="right"><span class="hint">Purchased reduces budget · Ordered counts as committed</span><button class="btn sm" id="btnBudgets">Edit budgets</button></div></div>
+  <div class="grid cols-3" id="categoryCards"></div>
+
+  <div class="section-title"><h2>Watchlist pulse</h2></div>
+  <div class="grid cols-3" id="watchStats"></div>
+
+  <div class="grid cols-3" style="margin-top:16px">
+    <div class="card">
+      <h2>🛒 To buy</h2>
+      <div class="faint" style="font-size:12.5px;margin-bottom:8px">Everyday needs — tick to log the purchase</div>
+      <div id="dashNeeds"></div>
+    </div>
+    <div class="card">
+      <h2>🏆 Best deals</h2>
+      <div class="faint" style="font-size:12.5px;margin-bottom:8px">Top purchases by money saved vs original price</div>
+      <div id="bestDeals"></div>
+    </div>
+    <div class="card">
+      <h2>Upcoming spend</h2>
+      <div class="faint" style="font-size:12.5px;margin-bottom:8px">Watchlist items marked Great Deal or Buy Now</div>
+      <div id="upcomingSpend"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h2>Offers ending soon</h2>
+    <div class="faint" style="font-size:12.5px;margin-bottom:10px">Next 7 days</div>
+    <div id="endingSoon"></div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h2>Payments &amp; cash flow</h2>
+    <div class="faint" style="font-size:12.5px">How purchases were paid — this never changes budget spending, which always uses the full purchase price. Ordered items are excluded here (already shown as committed).</div>
+    <div class="pay-grid" id="paySummary"></div>
+  </div>
+</section>
+
+<!-- ================= NEEDS ================= -->
+<section id="tab-needs" class="hidden">
+  <div class="card quick-need">
+    <input id="needName" placeholder="Add something you need — e.g. trash bin for bathroom" onkeydown="if(event.key==='Enter')addNeedQuick()">
+    <select id="needCategory">
+      <option value="interior" selected>Furniture, Living Room, Paint &amp; Interior</option>
+      <option value="kitchen">Kitchen</option>
+      <option value="outdoor">Outdoor</option>
+    </select>
+    <input id="needRoom" list="dlRooms" placeholder="Room (optional)">
+    <button class="btn green" onclick="addNeedQuick()">Add</button>
+  </div>
+  <div class="section-title"><h2>To buy</h2><span class="hint">Tick the circle when bought — a small purchase window logs the price against the budget</span></div>
+  <div id="needsList"></div>
+  <div class="empty hidden" id="needsEmpty">
+    <div class="big">Nothing on the needs list</div>
+    <div>Everyday items you still need for the house — quick to add, one tick to turn into a purchase.</div>
+  </div>
+</section>
+
+<!-- ================= WATCHLIST ================= -->
+<section id="tab-watchlist" class="hidden">
+  <div class="filter-bar">
+    <select id="wFilterStatus"><option value="">All statuses</option></select>
+    <select id="wFilterCategory"><option value="">All categories</option></select>
+    <select id="wFilterRoom"><option value="">All rooms</option></select>
+    <select id="wFilterStore"><option value="">All stores</option></select>
+    <select id="wFilterPriority"><option value="">All priorities</option><option>High</option><option>Medium</option><option>Low</option></select>
+    <select id="wSort">
+      <option value="score">Sort: Deal score</option>
+      <option value="expiry">Offer expiry</option>
+      <option value="discount">Highest discount</option>
+      <option value="saving">Largest saving</option>
+      <option value="price">Highest price</option>
+      <option value="newest">Newest</option>
+      <option value="oldest">Oldest</option>
+    </select>
+    <span class="count" id="wCount"></span>
+  </div>
+  <div class="watch-grid" id="watchGrid"></div>
+  <div class="empty hidden" id="watchEmpty">
+    <div class="big">Nothing on the watchlist yet</div>
+    <div>Add products you're tracking with the + button. They won't touch the budget until you mark them purchased.</div>
+  </div>
+</section>
+
+<!-- ================= PURCHASES ================= -->
+<section id="tab-purchases" class="hidden">
+  <div class="filter-bar">
+    <select id="pFilterStatus"><option value="">All statuses</option><option>Ordered</option><option>Purchased</option><option>Delivered</option><option>Installed</option><option>Cancelled</option></select>
+    <select id="pFilterCategory"><option value="">All categories</option></select>
+    <select id="pFilterRoom"><option value="">All rooms</option></select>
+    <select id="pFilterStore"><option value="">All stores</option></select>
+    <select id="pFilterInstalled"><option value="">Installed?</option><option value="yes">Installed</option><option value="no">Not installed</option></select>
+    <select id="pFilterPayMethod"><option value="">All payment methods</option></select>
+    <select id="pFilterPayStatus"><option value="">All payment statuses</option></select>
+    <select id="pFilterAccount"><option value="">All accounts</option></select>
+    <span class="count" id="pCount"></span>
+  </div>
+  <div class="table-wrap">
+    <table id="purchaseTable">
+      <thead><tr>
+        <th data-sort="status">Status</th>
+        <th data-sort="name">Item</th>
+        <th data-sort="category">Category</th>
+        <th data-sort="room">Room</th>
+        <th data-sort="store">Store</th>
+        <th data-sort="originalPrice">Original</th>
+        <th data-sort="paidPrice">Paid</th>
+        <th data-sort="saved">Saved</th>
+        <th data-sort="discount">Disc. %</th>
+        <th data-sort="purchaseDate">Date</th>
+        <th data-sort="paymentStatus">Payment</th>
+        <th>Link</th>
+      </tr></thead>
+      <tbody id="purchaseBody"></tbody>
+    </table>
+  </div>
+  <div class="empty hidden" id="purchaseEmpty">
+    <div class="big">No purchases yet</div>
+    <div>Purchases appear here when you buy something directly or convert a watched deal.</div>
+  </div>
+</section>
+
+<!-- ================= TIMELINE ================= -->
+<section id="tab-timeline" class="hidden">
+  <div class="section-title"><h2>Offer expiries</h2><span class="hint">Act on these first</span></div>
+  <div id="expiryTimeline"></div>
+  <div class="section-title" style="margin-top:36px"><h2>Purchases by month</h2></div>
+  <div class="tl-rail" id="monthTimeline"></div>
+</section>
+
+<!-- ================= HOUSE ================= -->
+<section id="tab-house" class="hidden">
+  <div class="grid cols-3">
+    <div class="card"><h2>🏠 House</h2><div id="houseInfo"></div></div>
+    <div class="card"><h2>Room sizes</h2><div id="houseRooms"></div></div>
+    <div class="card"><h2>Current projects</h2><div id="houseProjects"></div></div>
+  </div>
+  <div class="section-title"><h2>Floor plans</h2><span class="hint">Embedded in this file — click to enlarge</span></div>
+  <div class="grid cols-3" id="housePlans"></div>
+  <div class="section-title"><h2>Measurements</h2><span class="hint">The single source of truth — everything here is saved and included in backups</span></div>
+  <div class="grid cols-2" id="houseAreas"></div>
+  <div class="section-title"><h2>Measurement checklist</h2><span class="hint" id="checkProgress"></span></div>
+  <div class="card quick-need">
+    <input id="chkName" placeholder="Add a measurement you still need — e.g. radiator height, office" onkeydown="if(event.key==='Enter')addChecklistItem()">
+    <input id="chkRoom" list="dlRooms" placeholder="Room">
+    <select id="chkPriority"><option>Critical</option><option selected>Nice to have</option></select>
+    <button class="btn green" onclick="addChecklistItem()">Add</button>
+  </div>
+  <div id="checklistGroups"></div>
+</section>
+
+<!-- ================= ADMIN ================= -->
+<section id="tab-admin" class="hidden">
+  <div class="grid cols-2">
+    <div class="card">
+      <h2>Appearance</h2>
+      <div class="faint" style="font-size:12.5px">Same muted, misty feel — pick the accent family. Applies instantly.</div>
+      <div id="themePick" style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap"></div>
+    </div>
+    <div class="card">
+      <h2>Budgets</h2>
+      <div class="muted" style="font-size:13px;margin:4px 0 12px" id="adminBudgets"></div>
+      <button class="btn" onclick="openBudgetSettings()">Edit budgets</button>
+    </div>
+  </div>
+  <div class="section-title"><h2>Lists</h2><span class="hint">Available as suggestions in every form — removing one never changes existing entries</span></div>
+  <div class="grid cols-2" id="adminLists"></div>
+  <div class="section-title"><h2>Data &amp; backup</h2></div>
+  <div class="card">
+    <p class="muted" style="font-size:13.5px;line-height:1.65">Everything is stored <b>in this browser, tied to this file's location on disk</b> — not inside the file itself. Replacing the file with a new version keeps your data <b>only if the file name, folder and browser stay the same</b>. Before swapping in an updated file or moving to another machine: Export a JSON backup first, then Import it in the new copy. A quick export after a big entry session is cheap insurance.</p>
+    <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn primary" onclick="document.getElementById('btnExport').click()">Export JSON backup</button>
+      <button class="btn" onclick="document.getElementById('btnImport').click()">Import backup</button>
+    </div>
+  </div>
+</section>
+
+</div><!-- /app -->
+
+<button class="fab" id="fabAdd" title="Add item" aria-label="Add item">+</button>
+<div class="toast-wrap" id="toastWrap"></div>
+<div id="modalRoot"></div>
+
+<datalist id="dlRooms">
+  <option>Kitchen</option><option>Living Room</option><option>Hallway</option><option>Bedroom</option>
+  <option>Kids' Room</option><option>Laundry</option><option>Bathroom</option><option>Office</option>
+  <option>Garden</option><option>Terrace</option><option>Garage</option><option>Whole House</option>
+</datalist>
+<datalist id="dlProjects">
+  <option>Kitchen Renovation</option><option>Living Room</option><option>Hallway Wardrobe</option>
+  <option>Laundry</option><option>Garden</option><option>Terrace &amp; Deck</option><option>Paint &amp; Walls</option>
+</datalist>
+<datalist id="dlAccounts">
+  <option>Renovation savings</option><option>Joint current account</option><option>Personal card</option>
+  <option>Company card</option><option>Gift card</option><option>Financing agreement</option>
+</datalist>
+<datalist id="dlStores">
+  <option>Elkjøp</option><option>Power</option><option>IKEA</option><option>JYSK</option><option>Skeidar</option>
+  <option>Bohus</option><option>Maxbo</option><option>Byggmakker</option><option>Obs Bygg</option>
+  <option>Jernia</option><option>Clas Ohlson</option><option>Komplett</option><option>Fjellstrand</option>
+</datalist>
+<script>
+"use strict";
+/* =========================================================
+   Reno Hub — standalone renovation budget & watchlist
+   Storage: localStorage only. Schema versioned for future
+   price-history / Prisjakt / reminder integrations.
+   ========================================================= */
+
+const LS_KEY = "heddekroken_hub_v1";
+
+const SCHEMA = 9;
+const CAT_DEFS = {
+  kitchen:  { label: "Kitchen",                                  def: 250000 },
+  interior: { label: "Furniture, Living Room, Paint & Interior", def: 150000 },
+  outdoor:  { label: "Outdoor",                                  def: 100000 },
+};
+function defaultLists() {
+  return {
+    rooms: ["Kitchen","Living Room","Hallway","Bedroom","Kids' Room","Laundry","Bathroom","Office","Garden","Terrace","Garage","Whole House"],
+    projects: ["Kitchen Renovation","Living Room","Hallway Wardrobe","Laundry","Garden","Terrace & Deck","Paint & Walls"],
+    stores: ["Elkjøp","Power","IKEA","JYSK","Skeidar","Bohus","Maxbo","Byggmakker","Obs Bygg","Jernia","Clas Ohlson","Komplett","Fjellstrand"],
+    accounts: ["Renovation savings","Joint current account","Personal card","Company card","Gift card","Financing agreement"],
+  };
+}
+function defaultHouse() {
+  const C = (room, name, why, priority) => ({ id: uid() + Math.random().toString(36).slice(2,5), room, name, why, priority, done: false, value: "", dateDone: "" });
+  return {
+    info: [
+      ["House", "Detached, built 1987"],
+      ["Living area (BRA-i)", "213 m²"],
+      ["Total BRA", "242 m²"],
+      ["Garage", "18 m²"],
+      ["Ceiling height (main floor)", "2375 mm"],
+    ],
+    roomSizes: [
+      ["Living / Dining", "52 m² (L-shaped)"], ["Kitchen", "16.7 m²"], ["Laundry", "7 m²"],
+      ["Guest WC", "2.2 m²"], ["Basement Living Room", "13 m²"], ["Office", "14.5 m²"],
+      ["Guest Bedroom", "11.5 m²"], ["Basement Bathroom", "3.5 m²"], ["Storage", "6 m²"],
+    ],
+    areas: [
+      { title: "Living Room", items: [
+        ["Wall-to-wall (TV wall → sofa window)", "4169 mm"],
+        ["Length into dining", "7281 mm"],
+        ["TV area width (fireplace wall → built-in wall)", "2194 mm"],
+        ["Window end → adjoining wall", "3000 mm"],
+        ["Ceiling height", "2375 mm"],
+        ["Window sill height", "803 mm"],
+        ["Board below window", "780 mm"],
+      ]},
+      { title: "Kitchen", items: [
+        ["Opening to living room", "1355 mm"],
+        ["Corner return", "241 mm"],
+        ["Window above counter", "885 × 1230 mm"],
+        ["Door to laundry", "880 mm"],
+        ["Side feature window", "940 mm overall, 700 mm glass"],
+        ["Large window", "2200 × 1600 mm"],
+        ["Large window lower edge", "520 mm above finished floor"],
+        ["Countertop height", "890 mm above finished floor"],
+        ["Extractor boxing", "1500 W × 210 H × 200 D mm"],
+        ["Ceiling height", "2375 mm"],
+      ]},
+      { title: "Hallway Wardrobe", items: [
+        ["Maximum width", "1001 mm"], ["Depth", "524 mm"], ["Height", "2375 mm"], ["Hallway width", "3439 mm"],
+      ]},
+      { title: "TV Built-in", items: [
+        ["Wall width", "2194 mm"], ["Preferred TV bench", "1800 mm"], ["Remaining space", "394 mm (197 mm each side)"],
+      ]},
+      { title: "Mouldings", items: [
+        ["Baseboards", "95 mm"], ["Preferred crown", "95 mm"], ["Approx crown required", "45 m"],
+        ["Measured runs", "4274, 7285, 4286, 2175, 509, 2517, 1514, 3441, 1181, 1478, 1220, 2500, 960 mm"],
+      ]},
+    ],
+    floors: [
+      { title: "Basement", plan: "basement", rooms: [
+        ["Soverom 1 (guest bedroom)", "11.5 m²"], ["Stue (basement living)", "13 m²"],
+        ["Soverom 2 (office)", "14.5 m²"], ["Gang", "8 m²"], ["Gang (inner)", "4.6 m²"],
+        ["Bod", "6 m²"], ["Bod — listed as bathroom 3.5 m², plan shows bod ⚠", "3.5 m²"],
+      ], dims: [["Verandaplatting length", "965 cm"], ["Veranda door section", "306 cm"], ["Side section", "265 cm"], ["Garage sole plate side", "1260 cm"]] },
+      { title: "Ground floor", plan: "ground", rooms: [
+        ["Stue + spisestue + hall", "53 m²"], ["Kjøkken", "16.7 m²"], ["Vask (laundry)", "7 m²"],
+        ["WC", "2.2 m²"], ["VF (entry)", "—"], ["Garasje — plan 16.2 m², listed 18 m² ⚠", "16.2 m²"],
+      ], dims: [["Garage (plan)", "630 × 300 cm"], ["Deck depth", "360 cm"], ["Outdoor stair width", "176 cm"]] },
+      { title: "1st floor", plan: "first", rooms: [
+        ["Sov 1", "13.3 m²"], ["Sov 2", "12 m²"], ["Sov 3", "12 m²"],
+        ["Loftstue", "23.6 m²"], ["Bad", "10.3 m²"], ["Kott", "7.7 m² (0.4 m² full height)"],
+      ], dims: [] },
+    ],
+    projects: [
+      ["Ground floor", "Paint all walls one colour"],
+      ["Kitchen", "Complete renovation"],
+      ["Laundry", "Complete renovation"],
+      ["Living room", "Fireplace · built-in TV unit · wall panelling · crown moulding · baseboards"],
+      ["Hallway", "Built-in wardrobe"],
+    ],
+    checklist: [
+      C("Kitchen", "Total wall lengths", "Cabinet run layout for the renovation", "Critical"),
+      C("Kitchen", "Exact room width", "Cabinet and island planning", "Critical"),
+      C("Kitchen", "Exact room length", "Cabinet and island planning", "Critical"),
+      C("Kitchen", "Plumbing locations", "Sink and dishwasher placement", "Critical"),
+      C("Kitchen", "Socket locations", "Appliance and lighting plan", "Critical"),
+      C("Kitchen", "Radiator positions", "Avoid cabinet conflicts", "Nice to have"),
+      C("Living room", "Fireplace width / depth", "Built-in TV unit sizing", "Critical"),
+      C("Living room", "Fireplace projection", "Clearance for TV bench and panelling", "Critical"),
+      C("Living room", "Exact window widths", "Panelling layout and curtains", "Nice to have"),
+      C("Living room", "Door opening sizes", "Panelling and moulding runs", "Nice to have"),
+      C("Laundry", "Full room dimensions", "Complete renovation layout", "Critical"),
+      C("Laundry", "Door swing", "Machine and cabinet placement", "Critical"),
+      C("Laundry", "Drain positions", "Machine placement and plumbing", "Critical"),
+      C("Laundry", "Water locations", "Machine placement and plumbing", "Critical"),
+      C("Laundry", "Electrical outlets", "Machine hookup plan", "Nice to have"),
+      C("Laundry", "Window measurements", "Cabinet heights and light", "Nice to have"),
+      C("Hallway", "Overall hallway length", "Wardrobe context and flooring", "Nice to have"),
+      C("Hallway", "Door positions", "Wardrobe door clearance", "Nice to have"),
+    ],
+  };
+}
+function defaultSettings() {
+  return { budgets: { kitchen: 250000, interior: 150000, outdoor: 100000 }, buffer: 150000,
+    lists: defaultLists(), theme: "sage", roomNotes: {} };
+}
+/* Derived budget globals — rebuilt from S.settings whenever budgets change */
+let BUDGETS = {}, ACTIVE_BUDGET = 0, BUFFER = 0, TOTAL_CASH = 0;
+function refreshBudgetGlobals() {
+  const b = (S.settings && S.settings.budgets) || {};
+  BUDGETS = {};
+  for (const k of Object.keys(CAT_DEFS)) {
+    const v = parseFloat(b[k]);
+    BUDGETS[k] = { label: CAT_DEFS[k].label, amount: isNaN(v) ? CAT_DEFS[k].def : v };
+  }
+  const buf = parseFloat(S.settings && S.settings.buffer);
+  BUFFER = isNaN(buf) ? 150000 : buf;
+  ACTIVE_BUDGET = Object.values(BUDGETS).reduce((a, c) => a + c.amount, 0);
+  TOTAL_CASH = ACTIVE_BUDGET + BUFFER;
+}
+
+const WATCH_STATUSES = ["Watching","Waiting for Sale","Great Deal","Buy Now","Wishlist","Cancelled"];
+const PURCHASE_STATUSES = ["Ordered","Purchased","Delivered","Installed","Cancelled"];
+const SPENT_STATUSES = new Set(["Purchased","Delivered","Installed"]);
+const PAYMENT_METHODS = ["Bank card","Credit card","Bank transfer","Vipps","Invoice","Financing","Cash","Gift card","Mixed payment","Other"];
+const PAYMENT_STATUSES = ["Not paid","Deposit paid","Partially paid","Paid in full","Refunded","Partially refunded"];
+
+/* ---------- State ---------- */
+let S = load();
+function blank() {
+  return { schema: SCHEMA, createdAt: new Date().toISOString(),
+    settings: defaultSettings(), budgetHistory: [], house: defaultHouse(),
+    meta: { lastExportAt: "", changesSinceExport: 0 },
+    watchlist: [], purchases: [], needs: [], archive: [] };
+}
+const PAYMENT_DEFAULTS = {
+  paymentMethod: "", paymentLabel: "", paymentAccount: "", paymentStatus: "", datePaid: "",
+  depositAmount: null, amountPaid: null, outstandingAmount: null,
+  refundAmount: null, refundDate: "", paymentNotes: "", paymentParts: []
+};
+/* Safe schema migration: v1 data (no settings / payment fields) loads untouched otherwise */
+function migrate(d) {
+  if (!d.settings || typeof d.settings !== "object") d.settings = defaultSettings();
+  d.settings.budgets = Object.assign({ kitchen: 250000, interior: 150000, outdoor: 100000 }, d.settings.budgets || {});
+  if (d.settings.buffer == null || isNaN(parseFloat(d.settings.buffer))) d.settings.buffer = 150000;
+  d.budgetHistory = Array.isArray(d.budgetHistory) ? d.budgetHistory : [];
+  if (!d.settings.lists || typeof d.settings.lists !== "object") d.settings.lists = defaultLists();
+  for (const [k, v] of Object.entries(defaultLists())) if (!Array.isArray(d.settings.lists[k])) d.settings.lists[k] = v;
+  if (d.settings.theme !== "blue" && d.settings.theme !== "sage") d.settings.theme = "sage";
+  if (!d.settings.roomNotes || typeof d.settings.roomNotes !== "object") d.settings.roomNotes = {};
+  if (!d.house || typeof d.house !== "object") d.house = defaultHouse();
+  for (const k of ["info","roomSizes","areas","projects","checklist","floors"]) if (!Array.isArray(d.house[k])) d.house[k] = defaultHouse()[k];
+  if (!d.house.plans || typeof d.house.plans !== "object") d.house.plans = {};
+  if (!d.meta || typeof d.meta !== "object") d.meta = { lastExportAt: "", changesSinceExport: 0 };
+  d.needs = Array.isArray(d.needs) ? d.needs : [];
+  d.archive = Array.isArray(d.archive) ? d.archive : [];
+  for (const p of d.purchases) {
+    for (const [k, v] of Object.entries(PAYMENT_DEFAULTS)) if (p[k] === undefined) p[k] = Array.isArray(v) ? [] : v;
+    if (!Array.isArray(p.paymentParts)) p.paymentParts = [];
+  }
+  d.schema = SCHEMA;
+  return d;
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return blank();
+    const d = JSON.parse(raw);
+    if (!d || typeof d !== "object" || !Array.isArray(d.watchlist) || !Array.isArray(d.purchases)) return blank();
+    return migrate(d);
+  } catch (e) { console.error("Load failed", e); return blank(); }
+}
+let _skipBackupCount = false;
+function save() {
+  if (!_skipBackupCount && S.meta) S.meta.changesSinceExport = (S.meta.changesSinceExport || 0) + 1;
+  try { localStorage.setItem(LS_KEY, JSON.stringify(S)); }
+  catch (e) { toast("Could not save — storage may be full. Export a backup and remove large photos.", "warn"); }
+  if (typeof updateBackupStatus === "function") updateBackupStatus();
+  if (typeof scheduleFileWrite === "function") scheduleFileWrite();
+}
+function markExported() {
+  S.meta = S.meta || {};
+  S.meta.lastExportAt = new Date().toISOString();
+  S.meta.changesSinceExport = 0;
+  _skipBackupCount = true; save(); _skipBackupCount = false;
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+
+/* ---------- Formatting ---------- */
+const nf = new Intl.NumberFormat("nb-NO", { maximumFractionDigits: 0 });
+function kr(n) { return (n == null || isNaN(n)) ? "—" : nf.format(Math.round(n)) + " kr"; }
+function pct1(n) { return (n == null || isNaN(n)) ? "—" : (Math.round(n * 10) / 10).toLocaleString("nb-NO") + " %"; }
+function num(v) { const n = parseFloat(String(v ?? "").replace(/\s/g, "").replace(",", ".")); return isNaN(n) ? null : n; }
+function fdate(iso) {
+  if (!iso) return "—";
+  const d = new Date(iso + (iso.length === 10 ? "T12:00:00" : ""));
+  if (isNaN(d)) return "—";
+  return d.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
+function todayISO() { return new Date().toISOString().slice(0, 10); }
+function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+/* ---------- Price maths ---------- */
+function savedOf(orig, paid) {
+  if (orig == null || paid == null) return null;
+  return orig - paid;
+}
+function discountOf(orig, paid) {
+  if (orig == null || !orig || paid == null) return null;
+  return ((orig - paid) / orig) * 100;
+}
+function discountLabel(orig, paid) {
+  const d = discountOf(orig, paid);
+  if (d == null) return "—";
+  if (d < 0) return "Above original price";
+  return "−" + pct1(d);
+}
+
+/* ---------- Expiry ---------- */
+function daysUntil(iso) {
+  if (!iso) return null;
+  const end = new Date(iso + "T23:59:59");
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.floor((new Date(end.getFullYear(), end.getMonth(), end.getDate()) - startOfToday) / 86400000);
+}
+function expiryInfo(item) {
+  const d = daysUntil(item.offerEnd);
+  if (d == null) return null;
+  if (d < 0)  return { cls: "expiry-expired", txt: "Offer expired", days: d };
+  if (d === 0) return { cls: "expiry-today", txt: "Offer expires today", days: d };
+  if (d === 1) return { cls: "expiry-soon", txt: "Expires tomorrow", days: d };
+  if (d <= 7)  return { cls: "expiry-soon", txt: d + " days left", days: d };
+  return { cls: "expiry-ok", txt: d + " days left", days: d };
+}
+
+/* ---------- Deal score (guide only) ---------- */
+function dealScore(w) {
+  const orig = num(w.originalPrice), cur = num(w.currentPrice), tgt = num(w.targetPrice);
+  let score = 0;
+  const disc = discountOf(orig, cur);
+  if (disc != null && disc > 0) score += Math.min(disc, 50) / 50 * 40;          // up to 40
+  const saved = savedOf(orig, cur);
+  if (saved != null && saved > 0) score += Math.min(saved / 10000, 1) * 20;      // up to 20
+  if (tgt != null && cur != null) {
+    if (cur <= tgt) score += 30;
+    else { const gap = (cur - tgt) / tgt; score += Math.max(0, 30 * (1 - Math.min(gap / 0.25, 1))); } // fades over 25% above target
+  }
+  const ex = expiryInfo(w);
+  if (ex && ex.days >= 0 && ex.days <= 7 && disc != null && disc > 0) score += 10;
+  score = Math.round(Math.min(score, 100));
+  let tier, cls;
+  if (score >= 75) { tier = "Excellent Deal"; cls = "score-excellent"; }
+  else if (score >= 55) { tier = "Good Deal"; cls = "score-good"; }
+  else if (score >= 35) { tier = "Average"; cls = "score-average"; }
+  else { tier = "Poor"; cls = "score-poor"; }
+  return { score, tier, cls };
+}
+function targetHit(w) {
+  const cur = num(w.currentPrice), tgt = num(w.targetPrice);
+  return cur != null && tgt != null && cur <= tgt;
+}
+
+/* ---------- Payment maths (cash-flow view only — never alters budget spending) ---------- */
+function partsTotal(p) { return (p.paymentParts || []).reduce((a, r) => a + (num(r.amount) ?? 0), 0); }
+function paidAmount(p) {
+  const price = num(p.paidPrice) ?? num(p.advertisedPrice) ?? num(p.originalPrice);
+  if (p.paymentMethod === "Mixed payment" && (p.paymentParts || []).length) return partsTotal(p);
+  if (num(p.amountPaid) != null) return num(p.amountPaid);
+  if (p.paymentStatus === "Paid in full") return price ?? 0;
+  if (p.paymentStatus === "Deposit paid") return num(p.depositAmount) ?? 0;
+  return 0;
+}
+function outstandingOf(p) {
+  const price = num(p.paidPrice) ?? num(p.advertisedPrice) ?? num(p.originalPrice);
+  if (price == null) return null;
+  if (p.paymentStatus === "Refunded") return 0;
+  return Math.max(0, price - paidAmount(p));   // never negative
+}
+function payMethodLabel(p) { return p.paymentLabel || p.paymentMethod || ""; }
+function payCellText(p) {
+  const m = payMethodLabel(p);
+  if (!m && !p.paymentStatus) return "—";
+  let st = p.paymentStatus || "";
+  if (st === "Paid in full") st = "Paid";
+  const out = outstandingOf(p);
+  if ((st === "Not paid" || st === "Partially paid" || st === "Deposit paid" || st === "") && out != null && out > 0)
+    st = (st === "Deposit paid" ? "Deposit · " : "") + "Outstanding " + kr(out);
+  return [m, st].filter(Boolean).join(" · ") || "—";
+}
+
+/* ---------- Budget maths ---------- */
+function budgetState() {
+  let spent = 0, committed = 0, savedTotal = 0;
+  const perCat = {};
+  Object.keys(BUDGETS).forEach(k => perCat[k] = { spent: 0, committed: 0 });
+  for (const p of S.purchases) {
+    const cat = perCat[p.category] ? p.category : null;
+    const paid = num(p.paidPrice);
+    const est = paid ?? num(p.advertisedPrice) ?? num(p.originalPrice) ?? 0;
+    if (SPENT_STATUSES.has(p.status)) {
+      const v = paid ?? est;
+      spent += v;
+      if (cat) perCat[cat].spent += v;
+      const sv = savedOf(num(p.originalPrice), paid);
+      if (sv != null && sv > 0) savedTotal += sv;
+    } else if (p.status === "Ordered") {
+      committed += est;
+      if (cat) perCat[cat].committed += est;
+    }
+  }
+  const bufferUsed = Math.max(0, spent - ACTIVE_BUDGET);
+  const activeRemaining = Math.max(0, ACTIVE_BUDGET - spent);
+  const bufferRemaining = BUFFER - bufferUsed;
+  const expectedWatch = S.watchlist
+    .filter(w => w.status === "Great Deal" || w.status === "Buy Now")
+    .reduce((a, w) => a + (num(w.targetPrice) ?? num(w.currentPrice) ?? 0), 0);
+  const projected = TOTAL_CASH - spent - committed - expectedWatch;
+  return { spent, committed, savedTotal, perCat, bufferUsed, activeRemaining, bufferRemaining, expectedWatch, projected };
+}
+
+/* ---------- Toast ---------- */
+function toast(msg, kind = "ok") {
+  const w = document.getElementById("toastWrap");
+  const t = document.createElement("div");
+  t.className = "toast " + kind;
+  t.textContent = msg;
+  w.appendChild(t);
+  setTimeout(() => { t.style.opacity = "0"; t.style.transition = "opacity .3s"; setTimeout(() => t.remove(), 320); }, 2600);
+}
+
+/* ---------- Tabs & search ---------- */
+let activeTab = "dashboard";
+let query = "";
+document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => {
+  activeTab = b.dataset.tab;
+  document.querySelectorAll("nav.tabs button").forEach(x => x.classList.toggle("active", x === b));
+  ["dashboard","needs","watchlist","purchases","timeline","house","admin"].forEach(t =>
+    document.getElementById("tab-" + t).classList.toggle("hidden", t !== activeTab));
+  render();
+}));
+document.getElementById("globalSearch").addEventListener("input", e => { query = e.target.value.trim().toLowerCase(); render(); });
+function matches(o) {
+  if (!query) return true;
+  return ["name","category","room","project","store","notes","status"]
+    .some(f => String(o[f] ?? "").toLowerCase().includes(query))
+    || String(BUDGETS[o.category]?.label ?? "").toLowerCase().includes(query);
+}
+
+/* ---------- Renders ---------- */
+function render() {
+  if (activeTab === "dashboard") renderDashboard();
+  if (activeTab === "needs") renderNeeds();
+  if (activeTab === "watchlist") renderWatchlist();
+  if (activeTab === "purchases") renderPurchases();
+  if (activeTab === "timeline") renderTimeline();
+  if (activeTab === "house") renderHouse();
+  if (activeTab === "admin") renderAdmin();
+}
+
+function renderDashboard() {
+  const B = budgetState();
+  document.getElementById("stAvailable").textContent = kr(TOTAL_CASH);
+  document.getElementById("stSpent").textContent = kr(B.spent);
+  document.getElementById("stCommitted").textContent = kr(B.committed);
+  const rem = document.getElementById("stRemaining");
+  rem.textContent = kr(B.activeRemaining);
+  rem.className = "val num " + (B.activeRemaining > 0 ? "pos" : "crit");
+  const proj = document.getElementById("stProjected");
+  proj.textContent = kr(B.projected);
+  proj.className = "val num " + (B.projected < 0 ? "crit" : B.projected < BUFFER ? "warn" : "");
+  document.getElementById("stSaved").textContent = kr(B.savedTotal);
+
+  // Ring: share of active 500k used (incl. committed as lighter meaning via pct text only)
+  const usedPct = Math.min(B.spent / ACTIVE_BUDGET, 1);
+  const C = 2 * Math.PI * 76;
+  const ring = document.getElementById("ringSpent");
+  ring.setAttribute("stroke-dasharray", C.toFixed(1));
+  ring.setAttribute("stroke-dashoffset", (C * (1 - usedPct)).toFixed(1));
+  document.getElementById("ringPct").textContent = Math.round((B.spent / ACTIVE_BUDGET) * 100) + "%";
+  document.getElementById("ringLbl").textContent = "of " + nf.format(ACTIVE_BUDGET) + " kr";
+
+  // Vault
+  const vault = document.getElementById("vaultCard");
+  const vAmt = document.getElementById("vaultAmt");
+  const vNote = document.getElementById("vaultNote");
+  vault.classList.remove("intact","touched","breached");
+  if (B.bufferUsed <= 0) {
+    vault.classList.add("intact");
+    vAmt.textContent = kr(BUFFER);
+    vNote.textContent = "Untouched — spending draws on the active budget first.";
+  } else if (B.bufferRemaining >= 0) {
+    vault.classList.add("touched");
+    vAmt.textContent = kr(B.bufferRemaining);
+    vNote.textContent = kr(B.bufferUsed) + " of the buffer is in use.";
+  } else {
+    vault.classList.add("breached");
+    vAmt.textContent = kr(B.bufferRemaining);
+    vNote.textContent = "Buffer exceeded — total spend is above " + kr(TOTAL_CASH) + ".";
+  }
+
+  // Category cards
+  const cc = document.getElementById("categoryCards");
+  cc.innerHTML = Object.entries(BUDGETS).map(([k, cfg]) => {
+    const c = B.perCat[k];
+    const remain = cfg.amount - c.spent - c.committed;
+    const spentPct = Math.min(c.spent / cfg.amount * 100, 100);
+    const commPct = Math.min((c.spent + c.committed) / cfg.amount * 100, 100);
+    return `<div class="card cat-card">
+      <div class="row"><span class="cat-name">${cfg.label}</span><span class="faint num" style="font-size:13px">${kr(cfg.amount)}</span></div>
+      <div class="figures">
+        <div>Spent<b>${kr(c.spent)}</b></div>
+        <div>Committed<b>${kr(c.committed)}</b></div>
+        <div>Remaining<b class="${remain < 0 ? "neg" : "pos"}">${kr(remain)}</b></div>
+      </div>
+      <div class="bar"><i class="committed" style="width:${commPct}%"></i><i class="spent" style="width:${spentPct}%"></i></div>
+    </div>`;
+  }).join("");
+
+  // Watch stats
+  const live = S.watchlist.filter(w => w.status !== "Cancelled");
+  const watching = live.filter(w => w.status !== "Wishlist");
+  const wValue = watching.reduce((a, w) => a + (num(w.currentPrice) ?? 0), 0);
+  const wSave = watching.reduce((a, w) => { const s = savedOf(num(w.originalPrice), num(w.currentPrice)); return a + (s > 0 ? s : 0); }, 0);
+  const endingWeek = watching.filter(w => { const e = expiryInfo(w); return e && e.days >= 0 && e.days <= 7; }).length;
+  const targets = watching.filter(targetHit).length;
+  const discs = watching.map(w => discountOf(num(w.originalPrice), num(w.currentPrice))).filter(d => d != null && d > 0);
+  const avgDisc = discs.length ? discs.reduce((a, b) => a + b, 0) / discs.length : null;
+  document.getElementById("watchStats").innerHTML = [
+    ["Watching", watching.length + " items", "excl. wishlist & cancelled"],
+    ["Watchlist value", kr(wValue), "at current prices"],
+    ["Potential savings", kr(wSave), "vs original prices"],
+    ["Offers ending this week", endingWeek, endingWeek ? "act soon" : "all clear"],
+    ["Target prices reached", targets, targets ? "✓ ready to buy" : "none yet"],
+    ["Average watch discount", avgDisc == null ? "—" : pct1(avgDisc), "across discounted items"],
+  ].map(([l, v, s]) => `<div class="card stat-card"><div class="lbl">${l}</div><div class="val num">${v}</div><div class="sub">${s}</div></div>`).join("");
+
+  // Best deals
+  const best = S.purchases
+    .filter(p => SPENT_STATUSES.has(p.status))
+    .map(p => ({ p, s: savedOf(num(p.originalPrice), num(p.paidPrice)) }))
+    .filter(x => x.s != null && x.s > 0)
+    .sort((a, b) => b.s - a.s).slice(0, 5);
+  document.getElementById("bestDeals").innerHTML = best.length ? best.map((x, i) => `
+    <div class="deal-row">
+      <span class="rank">${i + 1}</span>
+      <span class="thumb">${x.p.image ? `<img src="${esc(x.p.image)}" alt="">` : "◇"}</span>
+      <span class="nm">${esc(x.p.name)}<small>${esc(x.p.store || "")}</small></span>
+      <span class="sv num"><b>${kr(x.s)}</b><small class="faint" style="display:block">${discountLabel(num(x.p.originalPrice), num(x.p.paidPrice))}</small></span>
+    </div>`).join("")
+    : `<div class="faint" style="padding:14px 0">No completed purchases with savings yet.</div>`;
+
+  // Upcoming spend
+  const up = S.watchlist.filter(w => w.status === "Great Deal" || w.status === "Buy Now");
+  const upTotal = up.reduce((a, w) => a + (num(w.targetPrice) ?? num(w.currentPrice) ?? 0), 0);
+  document.getElementById("upcomingSpend").innerHTML = up.length ? up.map(w => `
+    <div class="deal-row">
+      <span class="thumb">${w.image ? `<img src="${esc(w.image)}" alt="">` : "◇"}</span>
+      <span class="nm">${esc(w.name)}<small>${esc(w.store || "")} · ${esc(w.status)}</small></span>
+      <span class="sv num"><b style="color:var(--ink)">${kr(num(w.targetPrice) ?? num(w.currentPrice))}</b></span>
+    </div>`).join("") +
+    `<div style="display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">
+      <span class="muted">Expected spend</span><b class="num">${kr(upTotal)}</b></div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px">
+      <span class="muted">Remaining after expected</span><b class="num" style="color:${(B.activeRemaining - B.committed - upTotal) < 0 ? "var(--amber)" : "var(--forest)"}">${kr(B.activeRemaining - B.committed - upTotal)}</b></div>`
+    : `<div class="faint" style="padding:14px 0">Mark watchlist items as “Great Deal” or “Buy Now” to plan upcoming spend.</div>`;
+
+  // Ending soon
+  const soon = S.watchlist
+    .filter(w => !["Cancelled"].includes(w.status))
+    .map(w => ({ w, e: expiryInfo(w) }))
+    .filter(x => x.e && x.e.days >= 0 && x.e.days <= 7)
+    .sort((a, b) => a.e.days - b.e.days);
+  document.getElementById("endingSoon").innerHTML = soon.length ? soon.map(x => tlItem(x.w, x.e)).join("")
+    : `<div class="faint">No offers expiring in the next 7 days.</div>`;
+
+  // To buy — open needs, tick straight from the dashboard
+  const openNeeds = sortedNeeds();
+  document.getElementById("dashNeeds").innerHTML = openNeeds.length
+    ? openNeeds.slice(0, 6).map(n => needRow(n, true)).join("")
+      + (openNeeds.length > 6 ? `<div class="faint" style="font-size:12.5px;margin-top:6px">+ ${openNeeds.length - 6} more in the Needs tab</div>` : "")
+    : `<div class="faint" style="padding:14px 0">All caught up — add everyday items in the Needs tab.</div>`;
+
+  // Payments & cash flow — spent-status purchases only, to avoid double counting ordered/committed values
+  const payItems = S.purchases.filter(p => SPENT_STATUSES.has(p.status));
+  const paidFull = payItems.filter(p => p.paymentStatus === "Paid in full");
+  const paidFullSum = paidFull.reduce((a, p) => a + (num(p.paidPrice) ?? 0), 0);
+  const outSum = payItems.reduce((a, p) => a + (outstandingOf(p) ?? 0), 0);
+  const outCount = payItems.filter(p => (outstandingOf(p) ?? 0) > 0).length;
+  const depSum = payItems.reduce((a, p) => a + (num(p.depositAmount) ?? 0), 0);
+  const refSum = S.purchases.reduce((a, p) => a + (num(p.refundAmount) ?? 0), 0);
+  document.getElementById("paySummary").innerHTML = [
+    ["Paid in full", kr(paidFullSum), paidFull.length + " purchases", ""],
+    ["Outstanding", kr(outSum), outCount + (outCount === 1 ? " purchase" : " purchases"), outSum > 0 ? "warn" : ""],
+    ["Deposits paid", kr(depSum), "part-payments made", ""],
+    ["Still to be paid", kr(outSum), "total remaining cash out", outSum > 0 ? "warn" : ""],
+    ["Refunds received", kr(refSum), "returned to accounts", ""],
+  ].map(([l, v, s, c]) => `<div class="pstat"><div class="lbl">${l}</div><div class="val num ${c}">${v}</div><div class="lbl">${s}</div></div>`).join("");
+
+  // Missing-measurement flag — only shows while critical items remain
+  const critOpen = S.house.checklist.filter(c => !c.done && c.priority === "Critical");
+  document.getElementById("measureBanner").innerHTML = critOpen.length
+    ? `<div class="card" style="border-color:var(--amber-dim);margin-top:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <span style="font-size:20px">📐</span>
+        <span style="flex:1;min-width:200px"><b>${critOpen.length} critical measurement${critOpen.length === 1 ? "" : "s"} still missing</b>
+        <span class="faint" style="display:block;font-size:12.5px">${esc(critOpen.slice(0, 3).map(c => c.name + " (" + c.room + ")").join(" · "))}${critOpen.length > 3 ? " …" : ""}</span></span>
+        <button class="btn sm" onclick="gotoTab('house')">Open checklist</button>
+      </div>` : "";
+}
+
+function tlItem(w, e) {
+  return `<div class="tl-item" onclick="openWatchForm('${w.id}')">
+    <span class="thumb">${w.image ? `<img src="${esc(w.image)}" alt="">` : "◇"}</span>
+    <span class="info"><span class="nm">${esc(w.name)}</span><span class="st">${esc(w.store || "—")} · ${kr(num(w.currentPrice))}${targetHit(w) ? ' · <span class="badge-target">✓ target reached</span>' : ""}</span></span>
+    <span class="right">${e ? `<span class="chip ${e.cls}">${e.txt}</span>` : ""}<div class="faint num" style="font-size:11.5px;margin-top:3px">${w.offerEnd ? "ends " + fdate(w.offerEnd) : ""}</div></span>
+  </div>`;
+}
+
+/* ---------- Needs list ---------- */
+function needRow(n, compact) {
+  const meta = [catLabel(n.category), n.room, n.store, num(n.estPrice) != null ? "~" + kr(num(n.estPrice)) : null]
+    .filter(Boolean).join(" · ");
+  return `<div class="tl-item need-row">
+    <button class="need-check" onclick="openNeedBuy('${n.id}')" title="Bought it" aria-label="Mark as bought"></button>
+    <span class="info" onclick="openNeedForm('${n.id}')" style="cursor:pointer">
+      <span class="nm">${esc(n.name)}</span>
+      <span class="st">${esc(meta) || "&nbsp;"}</span>
+    </span>
+    ${n.priority ? `<span class="chip prio-${esc(n.priority)}">${esc(n.priority)}</span>` : ""}
+    ${compact ? "" : `<button class="btn sm ghost" onclick="openNeedForm('${n.id}')">Edit</button>`}
+  </div>`;
+}
+function sortedNeeds() {
+  const rank = { High: 0, Medium: 1, Low: 2 };
+  return S.needs.slice().sort((a, b) =>
+    (rank[a.priority] ?? 3) - (rank[b.priority] ?? 3) || (b.dateAdded || "").localeCompare(a.dateAdded || ""));
+}
+function renderNeeds() {
+  const list = sortedNeeds().filter(matches);
+  document.getElementById("needsEmpty").classList.toggle("hidden", S.needs.length > 0);
+  document.getElementById("needsList").innerHTML = list.map(n => needRow(n, false)).join("");
+}
+function addNeedQuick() {
+  const nameEl = document.getElementById("needName");
+  const name = nameEl.value.trim();
+  if (!name) { toast("Type what you need first", "warn"); return; }
+  S.needs.unshift({
+    id: uid(), name,
+    category: document.getElementById("needCategory").value,
+    room: document.getElementById("needRoom").value.trim(),
+    store: "", estPrice: "", priority: "", notes: "", image: "",
+    dateAdded: todayISO(),
+  });
+  nameEl.value = ""; nameEl.focus();
+  save(); render();
+  toast("Added to needs — tick it when bought");
+}
+function openNeedForm(id) {
+  const n = id ? S.needs.find(x => x.id === id) : null;
+  const v = f => esc(n?.[f] ?? "");
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true">
+    <h2>${n ? "Edit need" : "Add to needs list"}</h2>
+    <div class="form-grid">
+      <div class="field full"><label>What do you need?</label><input id="n_name" value="${v("name")}" placeholder="e.g. Trash bin for bathroom"></div>
+      <div class="field"><label>Category</label><select id="n_category">${catOptions(n?.category ?? "interior")}</select></div>
+      <div class="field"><label>Room</label><input id="n_room" list="dlRooms" value="${v("room")}"></div>
+      <div class="field"><label>Store <span class="opt">optional</span></label><input id="n_store" list="dlStores" value="${v("store")}"></div>
+      <div class="field"><label>Estimated price (kr) <span class="opt">optional</span></label><input id="n_estPrice" inputmode="decimal" value="${v("estPrice")}"></div>
+      <div class="field"><label>Priority</label><select id="n_priority"><option value="">—</option>${["High","Medium","Low"].map(p => `<option${n?.priority === p ? " selected" : ""}>${p}</option>`).join("")}</select></div>
+      <div class="field"><label>Photo <span class="opt">URL or upload</span></label><input id="n_image" value="${v("image")}"><input type="file" id="n_imageFile" accept="image/*" style="margin-top:6px"><div class="img-preview" id="n_imagePrev"></div></div>
+      <div class="field full"><label>Notes</label><textarea id="n_notes" rows="2">${v("notes")}</textarea></div>
+    </div>
+    <div class="modal-actions">
+      ${n ? `<button class="btn danger left" onclick="deleteNeed('${n.id}')">Delete</button>` : ""}
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      ${n ? `<button class="btn green" onclick="closeModal();openNeedBuy('${n.id}')">Bought it</button>` : ""}
+      <button class="btn primary" onclick="saveNeedForm('${n?.id ?? ""}')">${n ? "Save changes" : "Add to needs"}</button>
+    </div>
+  </div></div>`;
+  bindImageInput("n_imageFile", "n_image", "n_imagePrev");
+  document.getElementById("n_name").focus();
+}
+function saveNeedForm(id) {
+  const g = f => document.getElementById("n_" + f).value.trim();
+  if (!g("name")) { toast("Give it a name", "warn"); return; }
+  const data = { name: g("name"), category: g("category"), room: g("room"), store: g("store"),
+    estPrice: g("estPrice"), priority: g("priority"), image: g("image"), notes: g("notes") };
+  if (id) { Object.assign(S.needs.find(x => x.id === id), data); toast("Saved"); }
+  else { S.needs.unshift(Object.assign({ id: uid(), dateAdded: todayISO() }, data)); toast("Added to needs"); }
+  save(); closeModal(); render();
+}
+function deleteNeed(id) {
+  const i = S.needs.findIndex(x => x.id === id);
+  if (i >= 0) { S.needs.splice(i, 1); save(); closeModal(); render(); toast("Removed"); }
+}
+/* Tick → small purchase popup */
+function openNeedBuy(id) {
+  const n = S.needs.find(x => x.id === id);
+  if (!n) return;
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal narrow" role="dialog" aria-modal="true">
+    <h2>Bought it 🎉</h2>
+    <div class="muted" style="margin:-8px 0 16px;font-size:13.5px">${esc(n.name)}${n.store ? " · " + esc(n.store) : ""}</div>
+    <div class="form-grid" style="grid-template-columns:1fr">
+      <div class="field"><label>Price paid (kr)</label><input id="nb_paid" inputmode="decimal" value="${esc(n.estPrice ?? "")}" autofocus></div>
+      <div class="field"><label>Purchase date</label><input id="nb_date" type="date" value="${todayISO()}"></div>
+      <div class="field"><label>Store <span class="opt">optional</span></label><input id="nb_store" list="dlStores" value="${esc(n.store ?? "")}"></div>
+      <div class="field"><label>Payment method <span class="opt">optional</span></label><select id="nb_method"><option value="">—</option>${PAYMENT_METHODS.map(m => `<option>${m}</option>`).join("")}</select></div>
+      <div class="field"><label>Paid from / account <span class="opt">optional</span></label><input id="nb_account" list="dlAccounts"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="confirmNeedBuy('${n.id}')">Log purchase</button>
+    </div>
+  </div></div>`;
+}
+function needToPurchase(n, extra) {
+  const base = Object.assign({}, PAYMENT_DEFAULTS, {
+    id: uid(), name: n.name, category: n.category, room: n.room, project: "",
+    store: n.store, website: "", url: "", image: n.image || "",
+    originalPrice: "", advertisedPrice: n.estPrice || "", paidPrice: null,
+    purchaseDate: null, deliveryDate: null, installedDate: null, warrantyExpiry: null,
+    installed: false, notes: n.notes || "", status: "Purchased",
+    createdAt: new Date().toISOString(),
+    neededFrom: { dateAdded: n.dateAdded, priority: n.priority },
+  }, extra || {});
+  base.paymentParts = base.paymentParts || [];
+  return base;
+}
+function confirmNeedBuy(id) {
+  const i = S.needs.findIndex(x => x.id === id);
+  if (i < 0) return;
+  const n = S.needs[i];
+  const paid = num(document.getElementById("nb_paid").value);
+  if (paid == null) { toast("Enter the price you paid", "warn"); return; }
+  const date = document.getElementById("nb_date").value || todayISO();
+  const p = needToPurchase(n, {
+    paidPrice: paid,
+    purchaseDate: date,
+    store: document.getElementById("nb_store").value.trim() || n.store,
+    paymentMethod: document.getElementById("nb_method").value,
+    paymentAccount: document.getElementById("nb_account").value.trim(),
+    paymentStatus: "Paid in full",
+    datePaid: date,
+  });
+  p.outstandingAmount = outstandingOf(p);
+  S.purchases.unshift(p);
+  S.needs.splice(i, 1);
+  save(); closeModal(); render();
+  toast("Logged — " + kr(paid) + " deducted from " + catLabel(p.category));
+}
+
+/* ---------- Watchlist tab ---------- */
+function fillFilterOptions() {
+  const opts = (arr, sel, first) => {
+    const el = document.getElementById(sel);
+    const cur = el.value;
+    el.innerHTML = `<option value="">${first}</option>` + arr.map(v => `<option${v === cur ? " selected" : ""}>${esc(v)}</option>`).join("");
+  };
+  const uniq = (list, f) => [...new Set(list.map(x => x[f]).filter(Boolean))].sort();
+  opts(WATCH_STATUSES, "wFilterStatus", "All statuses");
+  opts(Object.values(BUDGETS).map(b => b.label), "wFilterCategory", "All categories");
+  opts(uniq(S.watchlist, "room"), "wFilterRoom", "All rooms");
+  opts(uniq(S.watchlist, "store"), "wFilterStore", "All stores");
+  opts(Object.values(BUDGETS).map(b => b.label), "pFilterCategory", "All categories");
+  opts(uniq(S.purchases, "room"), "pFilterRoom", "All rooms");
+  opts(uniq(S.purchases, "store"), "pFilterStore", "All stores");
+  opts(PAYMENT_METHODS.filter(m => S.purchases.some(p => p.paymentMethod === m)), "pFilterPayMethod", "All payment methods");
+  opts(PAYMENT_STATUSES.filter(st => S.purchases.some(p => p.paymentStatus === st)), "pFilterPayStatus", "All payment statuses");
+  opts(uniq(S.purchases, "paymentAccount"), "pFilterAccount", "All accounts");
+}
+function catLabel(k) { return BUDGETS[k]?.label ?? k ?? "—"; }
+function catKeyFromLabel(lbl) { return Object.keys(BUDGETS).find(k => BUDGETS[k].label === lbl) ?? ""; }
+
+function renderWatchlist() {
+  fillFilterOptions();
+  const fs = id => document.getElementById(id).value;
+  let list = S.watchlist.filter(matches);
+  if (fs("wFilterStatus")) list = list.filter(w => w.status === fs("wFilterStatus"));
+  if (fs("wFilterCategory")) list = list.filter(w => catLabel(w.category) === fs("wFilterCategory"));
+  if (fs("wFilterRoom")) list = list.filter(w => w.room === fs("wFilterRoom"));
+  if (fs("wFilterStore")) list = list.filter(w => w.store === fs("wFilterStore"));
+  if (fs("wFilterPriority")) list = list.filter(w => w.priority === fs("wFilterPriority"));
+  const sort = fs("wSort");
+  const val = w => ({
+    score: dealScore(w).score,
+    expiry: -(daysUntil(w.offerEnd) ?? 9999),
+    discount: discountOf(num(w.originalPrice), num(w.currentPrice)) ?? -999,
+    saving: savedOf(num(w.originalPrice), num(w.currentPrice)) ?? -999999,
+    price: num(w.currentPrice) ?? -1,
+    newest: w.dateAdded || "",
+    oldest: w.dateAdded || "",
+  }[sort]);
+  list.sort((a, b) => sort === "oldest" ? (val(a) < val(b) ? -1 : 1) : (val(b) < val(a) ? -1 : val(b) > val(a) ? 1 : 0));
+
+  document.getElementById("wCount").textContent = list.length + " of " + S.watchlist.length + " items";
+  document.getElementById("watchEmpty").classList.toggle("hidden", S.watchlist.length > 0);
+  document.getElementById("watchGrid").innerHTML = list.map(watchCard).join("");
+}
+
+function statusClass(s) {
+  return "chip status-" + (s || "").split(" ")[0].toLowerCase().replace("waiting","waiting").replace("great","great");
+}
+function watchCard(w) {
+  const orig = num(w.originalPrice), cur = num(w.currentPrice), tgt = num(w.targetPrice);
+  const disc = discountOf(orig, cur);
+  const ds = dealScore(w);
+  const ex = expiryInfo(w);
+  const hit = targetHit(w);
+  const diff = (tgt != null && cur != null) ? cur - tgt : null;
+  return `<div class="card watch-card ${hit ? "target-hit" : ""}">
+    <div class="watch-img">${w.image ? `<img src="${esc(w.image)}" alt="${esc(w.name)}">` : `<span class="ph"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L6 21"/></svg>No photo</span>`}</div>
+    <div class="watch-body">
+      <div class="watch-chips">
+        <span class="${statusClass(w.status)}">${esc(w.status)}</span>
+        ${w.priority ? `<span class="chip prio-${esc(w.priority)}">${esc(w.priority)}</span>` : ""}
+        ${ex ? `<span class="chip ${ex.cls}">${ex.txt}</span>` : ""}
+      </div>
+      <div class="name">${esc(w.name)}</div>
+      <div class="watch-meta">
+        ${w.store ? `<span>${esc(w.store)}</span>` : ""}
+        <span>${esc(catLabel(w.category))}</span>
+        ${w.room ? `<span>${esc(w.room)}</span>` : ""}
+        ${w.project ? `<span>${esc(w.project)}</span>` : ""}
+      </div>
+      <div class="price-row">
+        <span class="current">${kr(cur)}</span>
+        ${orig != null && disc != null && disc > 0 ? `<span class="orig">${kr(orig)}</span><span class="badge-discount">${discountLabel(orig, cur)}</span>` : orig != null && disc != null && disc < 0 ? `<span class="faint" style="font-size:12px">Above original price</span>` : ""}
+      </div>
+      ${tgt != null ? `<div class="target-row">${hit
+        ? `<span class="badge-target">✓ Target price reached</span> <span class="faint">(target ${kr(tgt)})</span>`
+        : `Target ${kr(tgt)} · <b>${kr(diff)}</b> above target`}</div>` : ""}
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:auto">
+        <span class="deal-score ${ds.cls}"><span class="dot"></span>${ds.tier} · ${ds.score}/100</span>
+        ${w.lastChecked ? `<span class="faint" style="font-size:11.5px">checked ${fdate(w.lastChecked)}</span>` : ""}
+      </div>
+    </div>
+    <div class="watch-actions">
+      ${w.url ? `<a class="btn sm ghost" href="${esc(w.url)}" target="_blank" rel="noopener">Open</a>` : ""}
+      ${w.url ? `<button class="btn sm ghost" onclick="copyLink('${w.id}')">Copy link</button>` : ""}
+      <button class="btn sm ghost" onclick="openWatchForm('${w.id}')">Edit</button>
+      <span class="spacer"></span>
+      <button class="btn sm ghost" onclick="watchAction('${w.id}','duplicate')" title="Duplicate">⧉</button>
+      <button class="btn sm ghost" onclick="watchAction('${w.id}','wishlist')" title="Move to wishlist">☆</button>
+      <button class="btn sm ghost" onclick="watchAction('${w.id}','archive')" title="Archive">⌫</button>
+      <button class="btn sm" onclick="watchAction('${w.id}','ordered')">Ordered</button>
+      <button class="btn sm green" onclick="openPurchaseConfirm('${w.id}')">Purchased</button>
+    </div>
+  </div>`;
+}
+
+function copyLink(id) {
+  const w = S.watchlist.find(x => x.id === id);
+  if (!w || !w.url) return;
+  navigator.clipboard?.writeText(w.url).then(() => toast("Link copied"));
+}
+function watchAction(id, act) {
+  const i = S.watchlist.findIndex(x => x.id === id);
+  if (i < 0) return;
+  const w = S.watchlist[i];
+  if (act === "duplicate") {
+    const c = JSON.parse(JSON.stringify(w));
+    c.id = uid(); c.name = w.name + " (copy)"; c.dateAdded = todayISO();
+    S.watchlist.splice(i + 1, 0, c);
+    toast("Duplicated");
+  } else if (act === "wishlist") {
+    w.status = "Wishlist";
+    toast("Moved to wishlist — excluded from expected spend");
+  } else if (act === "archive") {
+    S.archive.push({ type: "watch", archivedAt: new Date().toISOString(), item: w });
+    S.watchlist.splice(i, 1);
+    toast("Archived (kept in backup data)");
+  } else if (act === "ordered") {
+    const p = watchToPurchase(w, { status: "Ordered" });
+    S.purchases.unshift(p);
+    S.watchlist.splice(i, 1);
+    toast("Marked as ordered — now counted as committed spend");
+  }
+  save(); render();
+}
+
+function watchToPurchase(w, extra) {
+  return Object.assign({
+    id: uid(),
+    name: w.name, category: w.category, room: w.room, project: w.project,
+    store: w.store, website: w.website, url: w.url, image: w.image,
+    originalPrice: w.originalPrice,
+    advertisedPrice: w.currentPrice,
+    paidPrice: null,
+    purchaseDate: null, deliveryDate: null, installedDate: null, warrantyExpiry: null,
+    installed: false, notes: w.notes, status: "Purchased",
+    paymentMethod: "", paymentLabel: "", paymentAccount: "", paymentStatus: "", datePaid: "",
+    depositAmount: null, amountPaid: null, outstandingAmount: null,
+    refundAmount: null, refundDate: "", paymentNotes: "", paymentParts: [],
+    createdAt: new Date().toISOString(),
+    watchHistory: {  // original watch record kept for reference
+      dateAdded: w.dateAdded, targetPrice: w.targetPrice, lowestPrice: w.lowestPrice,
+      offerStart: w.offerStart, offerEnd: w.offerEnd, lastChecked: w.lastChecked,
+      priority: w.priority, statusAtConversion: w.status, priceHistory: w.priceHistory || []
+    }
+  }, extra || {});
+}
+
+/* ---------- Purchases tab ---------- */
+let pSort = { key: "purchaseDate", dir: -1 };
+document.querySelectorAll("#purchaseTable th[data-sort]").forEach(th => th.addEventListener("click", () => {
+  const k = th.dataset.sort;
+  if (pSort.key === k) pSort.dir *= -1; else pSort = { key: k, dir: -1 };
+  renderPurchases();
+}));
+
+function renderPurchases() {
+  fillFilterOptions();
+  const fs = id => document.getElementById(id).value;
+  let list = S.purchases.filter(matches);
+  if (fs("pFilterStatus")) list = list.filter(p => p.status === fs("pFilterStatus"));
+  if (fs("pFilterCategory")) list = list.filter(p => catLabel(p.category) === fs("pFilterCategory"));
+  if (fs("pFilterRoom")) list = list.filter(p => p.room === fs("pFilterRoom"));
+  if (fs("pFilterStore")) list = list.filter(p => p.store === fs("pFilterStore"));
+  if (fs("pFilterInstalled")) list = list.filter(p => !!p.installed === (fs("pFilterInstalled") === "yes"));
+  if (fs("pFilterPayMethod")) list = list.filter(p => p.paymentMethod === fs("pFilterPayMethod"));
+  if (fs("pFilterPayStatus")) list = list.filter(p => p.paymentStatus === fs("pFilterPayStatus"));
+  if (fs("pFilterAccount")) list = list.filter(p => p.paymentAccount === fs("pFilterAccount"));
+
+  const get = p => {
+    if (pSort.key === "saved") return savedOf(num(p.originalPrice), num(p.paidPrice)) ?? -Infinity;
+    if (pSort.key === "discount") return discountOf(num(p.originalPrice), num(p.paidPrice)) ?? -Infinity;
+    if (["originalPrice","paidPrice"].includes(pSort.key)) return num(p[pSort.key]) ?? -Infinity;
+    return p[pSort.key] ?? "";
+  };
+  list.sort((a, b) => { const A = get(a), B = get(b); return (A < B ? -1 : A > B ? 1 : 0) * -pSort.dir; });
+
+  document.getElementById("pCount").textContent = list.length + " of " + S.purchases.length + " purchases";
+  document.getElementById("purchaseEmpty").classList.toggle("hidden", S.purchases.length > 0);
+  document.querySelectorAll("#purchaseTable th .arrow").forEach(a => a.remove());
+  const th = document.querySelector(`#purchaseTable th[data-sort="${pSort.key}"]`);
+  if (th) th.insertAdjacentHTML("beforeend", ` <span class="arrow">${pSort.dir === -1 ? "▼" : "▲"}</span>`);
+
+  document.getElementById("purchaseBody").innerHTML = list.map(p => {
+    const sv = savedOf(num(p.originalPrice), num(p.paidPrice));
+    return `<tr onclick="openPurchaseForm('${p.id}')">
+      <td><span class="${statusClass(p.status)}">${esc(p.status)}</span></td>
+      <td><div class="item-name">${esc(p.name)}</div><div class="item-sub">${esc(p.project || p.room || "")}</div></td>
+      <td>${esc(catLabel(p.category))}</td>
+      <td>${esc(p.room || "—")}</td>
+      <td>${esc(p.store || "—")}</td>
+      <td class="num">${kr(num(p.originalPrice))}</td>
+      <td class="num" style="font-weight:600">${kr(num(p.paidPrice))}</td>
+      <td class="num ${sv > 0 ? "saved-pos" : sv < 0 ? "saved-neg" : ""}">${sv == null ? "—" : kr(sv)}</td>
+      <td class="num">${discountLabel(num(p.originalPrice), num(p.paidPrice))}</td>
+      <td class="num">${fdate(p.purchaseDate)}</td>
+      <td><span class="pay-cell">${esc(payCellText(p)).replace(/Outstanding [\d\s,.]+ kr/, m => `<span class="out">${m}</span>`)}</span></td>
+      <td onclick="event.stopPropagation()">${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">↗</a>` : "—"}</td>
+    </tr>`;
+  }).join("");
+}
+
+/* ---------- Timeline tab ---------- */
+function renderTimeline() {
+  const groups = { "Today": [], "Tomorrow": [], "This week": [], "Next week": [], "Later": [], "Expired": [] };
+  for (const w of S.watchlist) {
+    if (w.status === "Cancelled" || !w.offerEnd) continue;
+    const e = expiryInfo(w);
+    if (!e) continue;
+    if (e.days < 0) groups["Expired"].push({ w, e });
+    else if (e.days === 0) groups["Today"].push({ w, e });
+    else if (e.days === 1) groups["Tomorrow"].push({ w, e });
+    else if (e.days <= 7) groups["This week"].push({ w, e });
+    else if (e.days <= 14) groups["Next week"].push({ w, e });
+    else groups["Later"].push({ w, e });
+  }
+  const et = document.getElementById("expiryTimeline");
+  const any = Object.values(groups).some(g => g.length);
+  et.innerHTML = any ? Object.entries(groups).filter(([, g]) => g.length).map(([label, g]) => `
+    <div class="tl-group"><h3>${label}<span class="cnt">${g.length}</span></h3>
+    ${g.sort((a, b) => a.e.days - b.e.days).map(x => tlItem(x.w, x.e)).join("")}</div>`).join("")
+    : `<div class="empty"><div class="big">No offers with expiry dates</div><div>Add “offer ends” dates to watched items to see them here.</div></div>`;
+
+  // Purchases by month
+  const byMonth = {};
+  for (const p of S.purchases) {
+    if (!SPENT_STATUSES.has(p.status) && p.status !== "Ordered") continue;
+    const d = p.purchaseDate || p.createdAt?.slice(0, 10);
+    if (!d) continue;
+    const key = d.slice(0, 7);
+    (byMonth[key] = byMonth[key] || []).push(p);
+  }
+  const keys = Object.keys(byMonth).sort().reverse();
+  document.getElementById("monthTimeline").innerHTML = keys.length ? keys.map(k => {
+    const items = byMonth[k];
+    const total = items.reduce((a, p) => a + (num(p.paidPrice) ?? num(p.advertisedPrice) ?? 0), 0);
+    const label = new Date(k + "-15").toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+    return `<div class="tl-month"><h3>${label} <span class="mo-total num">· ${kr(total)}</span></h3>
+      ${items.map(p => `<div class="tl-item" onclick="openPurchaseForm('${p.id}')">
+        <span class="thumb">${p.image ? `<img src="${esc(p.image)}" alt="">` : "◇"}</span>
+        <span class="info"><span class="nm">${esc(p.name)}</span><span class="st">${esc(p.store || "—")} · ${esc(catLabel(p.category))}</span></span>
+        <span class="right num" style="font-weight:600">${kr(num(p.paidPrice) ?? num(p.advertisedPrice))}</span>
+      </div>`).join("")}</div>`;
+  }).join("") : `<div class="faint" style="padding:8px 0 20px">Purchases will appear here grouped by month.</div>`;
+}
+
+/* ---------- Modals ---------- */
+const modalRoot = document.getElementById("modalRoot");
+function closeModal() { modalRoot.innerHTML = ""; }
+modalRoot.addEventListener("click", e => { if (e.target.classList.contains("modal-backdrop")) closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+function catOptions(sel) {
+  return Object.entries(BUDGETS).map(([k, c]) => `<option value="${k}"${k === sel ? " selected" : ""}>${c.label}</option>`).join("");
+}
+function statusOptions(list, sel) {
+  return list.map(s => `<option${s === sel ? " selected" : ""}>${s}</option>`).join("");
+}
+
+/* Image helper: file → resized dataURL */
+function bindImageInput(fileId, urlId, previewId) {
+  const file = document.getElementById(fileId);
+  const url = document.getElementById(urlId);
+  const prev = document.getElementById(previewId);
+  const show = src => { if (src) { prev.style.display = "block"; prev.innerHTML = `<img src="${esc(src)}" alt="">`; } else { prev.style.display = "none"; } };
+  show(url.value);
+  url.addEventListener("input", () => show(url.value));
+  file.addEventListener("change", () => {
+    const f = file.files[0];
+    if (!f) return;
+    const img = new Image();
+    const rd = new FileReader();
+    rd.onload = () => { img.src = rd.result; };
+    img.onload = () => {
+      const max = 560;
+      const scale = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      url.value = c.toDataURL("image/jpeg", 0.78);
+      show(url.value);
+    };
+    rd.readAsDataURL(f);
+  });
+}
+
+/* ----- Watch item form (add / edit) ----- */
+function openWatchForm(id) {
+  const w = id ? S.watchlist.find(x => x.id === id) : null;
+  const v = f => esc(w?.[f] ?? "");
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true">
+    <h2>${w ? "Edit watched item" : "Add to watchlist"}</h2>
+    <div class="form-grid">
+      <div class="field full"><label>Product name</label><input id="f_name" value="${v("name")}" placeholder="e.g. Samsung Frame Pro 65&quot;"></div>
+      <div class="field"><label>Category</label><select id="f_category">${catOptions(w?.category ?? "interior")}</select></div>
+      <div class="field"><label>Status</label><select id="f_status">${statusOptions(WATCH_STATUSES, w?.status ?? "Watching")}</select></div>
+      <div class="field"><label>Room</label><input id="f_room" list="dlRooms" value="${v("room")}"></div>
+      <div class="field"><label>Project</label><input id="f_project" list="dlProjects" value="${v("project")}"></div>
+      <div class="field"><label>Store</label><input id="f_store" list="dlStores" value="${v("store")}"></div>
+      <div class="field"><label>Priority</label><select id="f_priority"><option value="">—</option>${["High","Medium","Low"].map(p => `<option${w?.priority === p ? " selected" : ""}>${p}</option>`).join("")}</select></div>
+      <div class="field"><label>Store website <span class="opt">optional</span></label><input id="f_website" value="${v("website")}" placeholder="https://…"></div>
+      <div class="field"><label>Product URL <span class="opt">optional</span></label><input id="f_url" value="${v("url")}" placeholder="https://…"></div>
+      <div class="field"><label>Original price (kr)</label><input id="f_originalPrice" inputmode="decimal" value="${v("originalPrice")}"></div>
+      <div class="field"><label>Current price (kr)</label><input id="f_currentPrice" inputmode="decimal" value="${v("currentPrice")}"></div>
+      <div class="field"><label>Target price (kr) <span class="opt">optional</span></label><input id="f_targetPrice" inputmode="decimal" value="${v("targetPrice")}"></div>
+      <div class="field"><label>Lowest historical price <span class="opt">optional</span></label><input id="f_lowestPrice" inputmode="decimal" value="${v("lowestPrice")}"></div>
+      <div class="field"><label>Offer starts <span class="opt">optional</span></label><input id="f_offerStart" type="date" value="${v("offerStart")}"></div>
+      <div class="field"><label>Offer ends <span class="opt">optional</span></label><input id="f_offerEnd" type="date" value="${v("offerEnd")}"></div>
+      <div class="field"><label>Last price checked</label><input id="f_lastChecked" type="date" value="${v("lastChecked") || todayISO()}"></div>
+      <div class="field"><label>Product photo <span class="opt">URL or upload</span></label><input id="f_image" value="${v("image")}" placeholder="https://… or upload →"><input type="file" id="f_imageFile" accept="image/*" style="margin-top:6px"><div class="img-preview" id="f_imagePrev"></div></div>
+      <div class="field full"><label>Notes</label><textarea id="f_notes" rows="2">${v("notes")}</textarea></div>
+    </div>
+    <div class="modal-actions">
+      ${w ? `<button class="btn danger left" onclick="deleteWatch('${w.id}')">Delete</button>` : ""}
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="saveWatchForm('${w?.id ?? ""}')">${w ? "Save changes" : "Add to watchlist"}</button>
+    </div>
+  </div></div>`;
+  bindImageInput("f_imageFile", "f_image", "f_imagePrev");
+  document.getElementById("f_name").focus();
+}
+function saveWatchForm(id) {
+  const g = f => document.getElementById("f_" + f).value.trim();
+  if (!g("name")) { toast("Give the item a name", "warn"); return; }
+  const data = {
+    name: g("name"), category: g("category"), status: g("status"),
+    room: g("room"), project: g("project"), store: g("store"), priority: g("priority"),
+    website: g("website"), url: g("url"),
+    originalPrice: g("originalPrice"), currentPrice: g("currentPrice"),
+    targetPrice: g("targetPrice"), lowestPrice: g("lowestPrice"),
+    offerStart: g("offerStart"), offerEnd: g("offerEnd"), lastChecked: g("lastChecked"),
+    image: g("image"), notes: g("notes"),
+  };
+  if (id) {
+    const w = S.watchlist.find(x => x.id === id);
+    // Track price changes for future price-history charts
+    if (w && num(w.currentPrice) !== num(data.currentPrice) && num(data.currentPrice) != null) {
+      (w.priceHistory = w.priceHistory || []).push({ date: todayISO(), price: num(data.currentPrice) });
+    }
+    Object.assign(w, data);
+    toast("Saved");
+  } else {
+    S.watchlist.unshift(Object.assign({ id: uid(), dateAdded: todayISO(),
+      priceHistory: num(data.currentPrice) != null ? [{ date: todayISO(), price: num(data.currentPrice) }] : [] }, data));
+    toast("Added to watchlist");
+  }
+  save(); closeModal(); render();
+}
+function deleteWatch(id) {
+  const i = S.watchlist.findIndex(x => x.id === id);
+  if (i >= 0) { S.watchlist.splice(i, 1); save(); closeModal(); render(); toast("Deleted"); }
+}
+
+/* ----- Convert watch → purchased ----- */
+function openPurchaseConfirm(id) {
+  const w = S.watchlist.find(x => x.id === id);
+  if (!w) return;
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal narrow" role="dialog" aria-modal="true">
+    <h2>Mark as purchased</h2>
+    <div class="muted" style="margin:-8px 0 16px;font-size:13.5px">${esc(w.name)}${w.store ? " · " + esc(w.store) : ""}</div>
+    <div class="form-grid" style="grid-template-columns:1fr">
+      <div class="field"><label>Actual price paid (kr)</label><input id="c_paid" inputmode="decimal" value="${esc(w.currentPrice ?? "")}" autofocus></div>
+      <div class="field"><label>Purchase date</label><input id="c_date" type="date" value="${todayISO()}"></div>
+      <div class="field"><label>Delivery date <span class="opt">optional</span></label><input id="c_delivery" type="date"></div>
+      <div class="field"><label>Payment method <span class="opt">optional</span></label><select id="c_method"><option value="">—</option>${PAYMENT_METHODS.map(m => `<option>${m}</option>`).join("")}</select></div>
+      <div class="field"><label>Paid from / account <span class="opt">optional</span></label><input id="c_account" list="dlAccounts" placeholder="e.g. Renovation savings"></div>
+      <div class="field"><label>Payment status</label><select id="c_paystatus">${PAYMENT_STATUSES.map(s => `<option${s === "Paid in full" ? " selected" : ""}>${s}</option>`).join("")}</select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="confirmPurchase('${w.id}')">Confirm purchase</button>
+    </div>
+  </div></div>`;
+}
+function confirmPurchase(id) {
+  const i = S.watchlist.findIndex(x => x.id === id);
+  if (i < 0) return;
+  const w = S.watchlist[i];
+  const paid = num(document.getElementById("c_paid").value);
+  if (paid == null) { toast("Enter the price you paid", "warn"); return; }
+  const payStatus = document.getElementById("c_paystatus").value;
+  const pDate = document.getElementById("c_date").value || todayISO();
+  const p = watchToPurchase(w, {
+    status: "Purchased",
+    paidPrice: paid,
+    purchaseDate: pDate,
+    deliveryDate: document.getElementById("c_delivery").value || null,
+    paymentMethod: document.getElementById("c_method").value,
+    paymentAccount: document.getElementById("c_account").value.trim(),
+    paymentStatus: payStatus,
+    datePaid: payStatus === "Paid in full" ? pDate : "",
+  });
+  p.outstandingAmount = outstandingOf(p);
+  S.purchases.unshift(p);
+  S.watchlist.splice(i, 1);
+  save(); closeModal(); render();
+  const sv = savedOf(num(p.originalPrice), paid);
+  toast(sv != null && sv > 0 ? `Purchased — you saved ${kr(sv)} (${discountLabel(num(p.originalPrice), paid)})` : "Purchased — budget updated");
+}
+
+/* ----- Purchase form (edit / add direct) ----- */
+function openPurchaseForm(id) {
+  const p = id ? S.purchases.find(x => x.id === id) : null;
+  const v = f => esc(p?.[f] ?? "");
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true">
+    <h2>${p ? "Edit purchase" : "Add purchase"}</h2>
+    <div class="form-grid">
+      <div class="field full"><label>Item</label><input id="p_name" value="${v("name")}"></div>
+      <div class="field"><label>Category</label><select id="p_category">${catOptions(p?.category ?? "interior")}</select></div>
+      <div class="field"><label>Status</label><select id="p_status">${statusOptions(PURCHASE_STATUSES, p?.status ?? "Purchased")}</select></div>
+      <div class="field"><label>Room</label><input id="p_room" list="dlRooms" value="${v("room")}"></div>
+      <div class="field"><label>Project</label><input id="p_project" list="dlProjects" value="${v("project")}"></div>
+      <div class="field"><label>Store</label><input id="p_store" list="dlStores" value="${v("store")}"></div>
+      <div class="field"><label>Product URL <span class="opt">optional</span></label><input id="p_url" value="${v("url")}"></div>
+      <div class="field"><label>Original price (kr)</label><input id="p_originalPrice" inputmode="decimal" value="${v("originalPrice")}"></div>
+      <div class="field"><label>Advertised price (kr)</label><input id="p_advertisedPrice" inputmode="decimal" value="${v("advertisedPrice")}"></div>
+      <div class="field"><label>Actual price paid (kr)</label><input id="p_paidPrice" inputmode="decimal" value="${v("paidPrice")}"></div>
+      <div class="field"><label>Purchase date</label><input id="p_purchaseDate" type="date" value="${v("purchaseDate")}"></div>
+      <div class="field"><label>Delivery date <span class="opt">optional</span></label><input id="p_deliveryDate" type="date" value="${v("deliveryDate")}"></div>
+      <div class="field"><label>Installed date <span class="opt">optional</span></label><input id="p_installedDate" type="date" value="${v("installedDate")}"></div>
+      <div class="field"><label>Warranty expiry <span class="opt">optional</span></label><input id="p_warrantyExpiry" type="date" value="${v("warrantyExpiry")}"></div>
+      <div class="field"><label>Installed</label><select id="p_installed"><option value="no"${!p?.installed ? " selected" : ""}>No</option><option value="yes"${p?.installed ? " selected" : ""}>Yes</option></select></div>
+      <div class="field"><label>Payment method</label><select id="p_paymentMethod" onchange="togglePartsUI()"><option value="">—</option>${PAYMENT_METHODS.map(m => `<option${p?.paymentMethod === m ? " selected" : ""}>${m}</option>`).join("")}</select></div>
+      <div class="field"><label>Custom label <span class="opt">e.g. DNB Mastercard, Klarna</span></label><input id="p_paymentLabel" value="${v("paymentLabel")}"></div>
+      <div class="field"><label>Paid from / account <span class="opt">optional</span></label><input id="p_paymentAccount" list="dlAccounts" value="${v("paymentAccount")}" placeholder="e.g. Renovation savings"></div>
+      <div class="field"><label>Payment status</label><select id="p_paymentStatus"><option value="">—</option>${PAYMENT_STATUSES.map(s => `<option${p?.paymentStatus === s ? " selected" : ""}>${s}</option>`).join("")}</select></div>
+      <div class="field"><label>Date paid <span class="opt">optional</span></label><input id="p_datePaid" type="date" value="${v("datePaid")}"></div>
+      <details class="pay-details"${p && (num(p.depositAmount) != null || num(p.amountPaid) != null || num(p.refundAmount) != null || (p.paymentParts || []).length || p.paymentNotes) ? " open" : ""}>
+        <summary>Payment details <span class="opt">deposits, partial payments, refunds, mixed payments</span></summary>
+        <div class="inner">
+          <div class="field"><label>Deposit amount (kr)</label><input id="p_depositAmount" inputmode="decimal" value="${v("depositAmount")}" oninput="updateOutstandingHint()"></div>
+          <div class="field"><label>Amount paid so far (kr)</label><input id="p_amountPaid" inputmode="decimal" value="${v("amountPaid")}" oninput="updateOutstandingHint()"></div>
+          <div class="field"><label>Refund amount (kr)</label><input id="p_refundAmount" inputmode="decimal" value="${v("refundAmount")}"></div>
+          <div class="field"><label>Refund date</label><input id="p_refundDate" type="date" value="${v("refundDate")}"></div>
+          <div class="field" style="grid-column:1/-1"><label>Outstanding <span class="opt">calculated — never negative</span></label><div class="num" id="outstandingHint" style="font-weight:600;padding:4px 0">—</div></div>
+          <div style="grid-column:1/-1" id="partsSection">
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--ink-dim);margin-bottom:6px">Mixed payment breakdown</label>
+            <div id="partsWrap"></div>
+            <div class="parts-warning hidden" id="partsWarning">⚠ Breakdown exceeds the purchase price — double-check the amounts.</div>
+            <button type="button" class="btn sm" style="margin-top:6px" onclick="addPart()">+ Add payment row</button>
+          </div>
+          <div class="field" style="grid-column:1/-1"><label>Payment notes</label><textarea id="p_paymentNotes" rows="2">${v("paymentNotes")}</textarea></div>
+        </div>
+      </details>
+      <div class="field"><label>Photo <span class="opt">URL or upload</span></label><input id="p_image" value="${v("image")}"><input type="file" id="p_imageFile" accept="image/*" style="margin-top:6px"><div class="img-preview" id="p_imagePrev"></div></div>
+      <div class="field full"><label>Notes <span class="opt">receipt refs, invoice numbers…</span></label><textarea id="p_notes" rows="2">${v("notes")}</textarea></div>
+    </div>
+    <div class="modal-actions">
+      ${p ? `<button class="btn danger left" onclick="deletePurchase('${p.id}')">Delete</button>` : ""}
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="savePurchaseForm('${p?.id ?? ""}')">${p ? "Save changes" : "Add purchase"}</button>
+    </div>
+  </div></div>`;
+  bindImageInput("p_imageFile", "p_image", "p_imagePrev");
+  formParts = JSON.parse(JSON.stringify(p?.paymentParts || []));
+  renderPartsUI();
+  togglePartsUI();
+  updateOutstandingHint();
+}
+/* Mixed-payment rows editor */
+let formParts = [];
+function renderPartsUI() {
+  const wrap = document.getElementById("partsWrap");
+  if (!wrap) return;
+  wrap.innerHTML = formParts.map((r, i) => `<div class="part-row" data-i="${i}">
+    <select class="part-method">${PAYMENT_METHODS.filter(m => m !== "Mixed payment").map(m => `<option${r.method === m ? " selected" : ""}>${m}</option>`).join("")}</select>
+    <input class="part-account" placeholder="Account / card" value="${esc(r.account ?? "")}">
+    <input class="part-amount" inputmode="decimal" placeholder="Amount" value="${esc(r.amount ?? "")}" oninput="updatePartsWarning()">
+    <input class="part-date" type="date" value="${esc(r.date ?? "")}">
+    <button type="button" class="btn sm ghost" onclick="removePart(${i})" title="Remove">✕</button>
+  </div>`).join("");
+  updatePartsWarning();
+}
+function addPart() { readPartsFromDOM(); formParts.push({ method: "Bank card", account: "", amount: "", date: todayISO(), notes: "" }); renderPartsUI(); }
+function removePart(i) { readPartsFromDOM(); formParts.splice(i, 1); renderPartsUI(); }
+function readPartsFromDOM() {
+  const rows = document.querySelectorAll("#partsWrap .part-row");
+  const out = [];
+  rows.forEach(r => out.push({
+    method: r.querySelector(".part-method")?.value ?? "",
+    account: r.querySelector(".part-account")?.value ?? "",
+    amount: r.querySelector(".part-amount")?.value ?? "",
+    date: r.querySelector(".part-date")?.value ?? "",
+    notes: "",
+  }));
+  if (rows.length) formParts = out;
+  return formParts;
+}
+function togglePartsUI() {
+  const sec = document.getElementById("partsSection");
+  if (!sec) return;
+  const mixed = document.getElementById("p_paymentMethod")?.value === "Mixed payment";
+  sec.classList.toggle("hidden", !mixed);
+  if (mixed && !formParts.length) { formParts = [{ method: "Bank card", account: "", amount: "", date: todayISO(), notes: "" }]; renderPartsUI(); }
+  const det = sec.closest ? sec.closest("details") : null;
+  if (mixed && det) det.open = true;
+}
+function updatePartsWarning() {
+  const warnEl = document.getElementById("partsWarning");
+  if (!warnEl) return;
+  readPartsFromDOM();
+  const price = num(document.getElementById("p_paidPrice")?.value);
+  const total = formParts.reduce((a, r) => a + (num(r.amount) ?? 0), 0);
+  warnEl.classList.toggle("hidden", !(price != null && total > price));
+  updateOutstandingHint();
+}
+function updateOutstandingHint() {
+  const el = document.getElementById("outstandingHint");
+  if (!el) return;
+  const probe = {
+    paidPrice: document.getElementById("p_paidPrice")?.value,
+    paymentMethod: document.getElementById("p_paymentMethod")?.value,
+    paymentStatus: document.getElementById("p_paymentStatus")?.value,
+    depositAmount: document.getElementById("p_depositAmount")?.value,
+    amountPaid: document.getElementById("p_amountPaid")?.value,
+    paymentParts: formParts,
+  };
+  const out = outstandingOf(probe);
+  el.textContent = out == null ? "—" : kr(out);
+}
+function savePurchaseForm(id) {
+  const g = f => document.getElementById("p_" + f).value.trim();
+  if (!g("name")) { toast("Give the purchase a name", "warn"); return; }
+  const data = {
+    name: g("name"), category: g("category"), status: g("status"),
+    room: g("room"), project: g("project"), store: g("store"), url: g("url"),
+    originalPrice: g("originalPrice"), advertisedPrice: g("advertisedPrice"), paidPrice: g("paidPrice"),
+    purchaseDate: g("purchaseDate"), deliveryDate: g("deliveryDate"),
+    installedDate: g("installedDate"), warrantyExpiry: g("warrantyExpiry"),
+    installed: g("installed") === "yes",
+    image: g("image"), notes: g("notes"),
+    paymentMethod: g("paymentMethod"), paymentLabel: g("paymentLabel"),
+    paymentAccount: g("paymentAccount"), paymentStatus: g("paymentStatus"), datePaid: g("datePaid"),
+    depositAmount: g("depositAmount") || null, amountPaid: g("amountPaid") || null,
+    refundAmount: g("refundAmount") || null, refundDate: g("refundDate"),
+    paymentNotes: g("paymentNotes"), paymentParts: readPartsFromDOM().filter(r => r.amount || r.account),
+  };
+  data.outstandingAmount = outstandingOf(Object.assign({}, data));
+  if (data.paymentMethod === "Mixed payment") {
+    const pt = data.paymentParts.reduce((a, r) => a + (num(r.amount) ?? 0), 0);
+    const price = num(data.paidPrice);
+    if (price != null && pt > price) toast("Note: payment breakdown exceeds the purchase price", "warn");
+  }
+  if (id) { Object.assign(S.purchases.find(x => x.id === id), data); toast("Saved"); }
+  else { S.purchases.unshift(Object.assign({ id: uid(), createdAt: new Date().toISOString() }, data)); toast("Purchase added — budget updated"); }
+  save(); closeModal(); render();
+}
+function deletePurchase(id) {
+  const i = S.purchases.findIndex(x => x.id === id);
+  if (i >= 0) { S.purchases.splice(i, 1); save(); closeModal(); render(); toast("Deleted — budget updated"); }
+}
+
+/* ----- Budget settings ----- */
+function openBudgetSettings() {
+  const b = S.settings.budgets;
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal narrow" role="dialog" aria-modal="true">
+    <h2>Budget settings</h2>
+    <div class="form-grid" style="grid-template-columns:1fr">
+      <div class="field"><label>Kitchen (kr)</label><input id="b_kitchen" inputmode="decimal" value="${esc(b.kitchen)}" oninput="updateBudgetTotals()"></div>
+      <div class="field"><label>Furniture, Living Room, Paint &amp; Interior (kr)</label><input id="b_interior" inputmode="decimal" value="${esc(b.interior)}" oninput="updateBudgetTotals()"></div>
+      <div class="field"><label>Outdoor (kr)</label><input id="b_outdoor" inputmode="decimal" value="${esc(b.outdoor)}" oninput="updateBudgetTotals()"></div>
+      <div class="field"><label>Protected buffer (kr)</label><input id="b_buffer" inputmode="decimal" value="${esc(S.settings.buffer)}" oninput="updateBudgetTotals()"></div>
+    </div>
+    <div class="budget-totals">
+      <div class="row"><span class="muted">Active renovation budget</span><b class="num" id="bt_active">—</b></div>
+      <div class="row"><span class="muted">Total available cash</span><b class="num" id="bt_total">—</b></div>
+      <div class="faint" style="font-size:12px;margin-top:6px">Both totals are calculated automatically — the buffer stays protected and is only touched once spending exceeds the active budget.</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost left" onclick="restoreDefaultBudgets()">Restore default budgets</button>
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="saveBudgetSettings()">Save budgets</button>
+    </div>
+  </div></div>`;
+  updateBudgetTotals();
+}
+function readBudgetInputs() {
+  const g = id => num(document.getElementById(id).value);
+  return {
+    kitchen: g("b_kitchen") ?? S.settings.budgets.kitchen,
+    interior: g("b_interior") ?? S.settings.budgets.interior,
+    outdoor: g("b_outdoor") ?? S.settings.budgets.outdoor,
+    buffer: g("b_buffer") ?? S.settings.buffer,
+  };
+}
+function updateBudgetTotals() {
+  const r = readBudgetInputs();
+  const active = r.kitchen + r.interior + r.outdoor;
+  document.getElementById("bt_active").textContent = kr(active);
+  document.getElementById("bt_total").textContent = kr(active + r.buffer);
+}
+function applyBudgetChange(next, label) {
+  const prev = { budgets: Object.assign({}, S.settings.budgets), buffer: S.settings.buffer };
+  const changed = ["kitchen","interior","outdoor"].some(k => prev.budgets[k] !== next[k]) || prev.buffer !== next.buffer;
+  if (changed) {
+    S.budgetHistory.push({
+      date: new Date().toISOString(),
+      previous: prev,
+      next: { budgets: { kitchen: next.kitchen, interior: next.interior, outdoor: next.outdoor }, buffer: next.buffer },
+    });
+    S.settings.budgets = { kitchen: next.kitchen, interior: next.interior, outdoor: next.outdoor };
+    S.settings.buffer = next.buffer;
+    refreshBudgetGlobals();
+    save();
+    toast(label);
+  }
+  closeModal(); render();
+}
+function saveBudgetSettings() {
+  const r = readBudgetInputs();
+  if ([r.kitchen, r.interior, r.outdoor, r.buffer].some(v => v == null || v < 0)) { toast("Budgets must be zero or positive numbers", "warn"); return; }
+  applyBudgetChange(r, "Budgets updated — all totals recalculated");
+}
+function restoreDefaultBudgets() {
+  if (!confirm("Restore default budgets (250k / 150k / 100k, buffer 150k)?\n\nOnly the budget figures are reset — purchases, watchlist items, photos and price history are untouched.")) return;
+  const d = defaultSettings();
+  applyBudgetChange({ kitchen: d.budgets.kitchen, interior: d.budgets.interior, outdoor: d.budgets.outdoor, buffer: d.buffer }, "Default budgets restored");
+}
+document.getElementById("btnBudgets").addEventListener("click", openBudgetSettings);
+document.getElementById("btnAddPurchase").addEventListener("click", () => openPurchaseForm());
+document.getElementById("btnAddWatch").addEventListener("click", () => openWatchForm());
+
+/* ----- Quick add chooser ----- */
+document.getElementById("fabAdd").addEventListener("click", () => {
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal narrow" role="dialog" aria-modal="true">
+    <h2>Add something</h2>
+    <div style="display:grid;gap:10px">
+      <button class="btn primary" style="justify-content:center;padding:14px" onclick="openWatchForm()">Watch a deal<span class="faint" style="font-weight:400;font-size:12px">&nbsp;— doesn't touch the budget yet</span></button>
+      <button class="btn green" style="justify-content:center;padding:14px" onclick="openPurchaseForm()">Log a purchase<span class="faint" style="font-weight:400;font-size:12px">&nbsp;— counts against the budget</span></button>
+      <button class="btn" style="justify-content:center;padding:14px" onclick="openNeedForm()">Add to needs list<span class="faint" style="font-weight:400;font-size:12px">&nbsp;— everyday items, tick when bought</span></button>
+    </div>
+    <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Cancel</button></div>
+  </div></div>`;
+});
+
+/* ---------- Export / Import ---------- */
+function updateBackupStatus() {
+  const el = document.getElementById("backupStatus");
+  if (!el) return;
+  const m = S.meta || {};
+  const changes = m.changesSinceExport || 0;
+  const hasData = S.purchases.length + S.watchlist.length + S.needs.length > 0;
+  let txt, stale;
+  if (!m.lastExportAt) {
+    txt = hasData ? "No backup yet" : "Backups live here";
+    stale = hasData;
+  } else {
+    const days = Math.floor((Date.now() - new Date(m.lastExportAt).getTime()) / 86400000);
+    txt = days === 0 ? "Backed up today" : "Backup " + days + "d ago";
+    if (changes > 0) txt += " · " + changes + " change" + (changes === 1 ? "" : "s");
+    stale = days >= 7 || changes >= 20;
+  }
+  el.textContent = txt;
+  el.classList.toggle("stale", !!stale);
+}
+document.getElementById("backupStatus").addEventListener("click", () => document.getElementById("btnExport").click());
+document.getElementById("btnExport").addEventListener("click", () => {
+  markExported();
+  const blob = new Blob([JSON.stringify(S, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "reno-hub-backup-" + todayISO() + ".json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("Backup downloaded");
+});
+document.getElementById("btnImport").addEventListener("click", () => document.getElementById("importFile").click());
+document.getElementById("importFile").addEventListener("change", e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try {
+      const d = JSON.parse(rd.result);
+      if (!d || !Array.isArray(d.watchlist) || !Array.isArray(d.purchases)) throw new Error("Not a Reno Hub backup");
+      modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal narrow">
+        <h2>Restore backup?</h2>
+        <p class="muted" style="font-size:14px">This replaces the current data with the backup:<br>
+        <b>${d.watchlist.length}</b> watched items · <b>${d.purchases.length}</b> purchases.<br><br>
+        The data currently in the app will be lost unless you export it first.</p>
+        <div class="modal-actions">
+          <button class="btn ghost" onclick="closeModal()">Cancel</button>
+          <button class="btn primary" id="confirmImport">Replace data</button>
+        </div></div></div>`;
+      document.getElementById("confirmImport").addEventListener("click", () => {
+        S = migrate(d);
+        refreshBudgetGlobals();
+        rebuildDatalists();
+        applyTheme();
+        save(); closeModal(); render(); toast("Backup restored");
+      });
+    } catch (err) { toast("Import failed: " + err.message, "warn"); }
+    e.target.value = "";
+  };
+  rd.readAsText(f);
+});
+
+/* ---------- Filter listeners ---------- */
+["wFilterStatus","wFilterCategory","wFilterRoom","wFilterStore","wFilterPriority","wSort"]
+  .forEach(id => document.getElementById(id).addEventListener("change", renderWatchlist));
+["pFilterStatus","pFilterCategory","pFilterRoom","pFilterStore","pFilterInstalled","pFilterPayMethod","pFilterPayStatus","pFilterAccount"]
+  .forEach(id => document.getElementById(id).addEventListener("change", renderPurchases));
+
+/* ---------- Room measurements ---------- */
+function openMeasurements() {
+  const rooms = S.settings.lists.rooms || [];
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true">
+    <h2>📏 Room measurements</h2>
+    <div class="faint" style="font-size:12.5px;margin:-10px 0 16px">Quick reference while shopping — e.g. "3.2 × 4.1 m, ceiling 2.4 m, hallway depth 52.4 cm". Add rooms on the Admin tab.</div>
+    <div class="form-grid" style="grid-template-columns:1fr">
+      ${rooms.map((r, i) => `<div class="field"><label>${esc(r)}</label><input class="measure-input" data-room="${esc(r)}" value="${esc(S.settings.roomNotes[r] ?? "")}" placeholder="Dimensions, clearances, quirks…"></div>`).join("")}
+    </div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="saveMeasurements()">Save measurements</button>
+    </div>
+  </div></div>`;
+}
+function saveMeasurements() {
+  document.querySelectorAll(".measure-input").forEach(inp => {
+    const room = inp.dataset.room, v = inp.value.trim();
+    if (v) S.settings.roomNotes[room] = v;
+    else delete S.settings.roomNotes[room];
+  });
+  save(); closeModal();
+  toast("Measurements saved");
+}
+function gotoTab(t) { const b = document.querySelector(`nav.tabs button[data-tab="${t}"]`); if (b) b.click(); }
+document.getElementById("btnMeasure").addEventListener("click", () => gotoTab("house"));
+
+/* ---------- House: floorplans (embedded in this file — survive any data reset) ---------- */
+/* Plan images live in the person's private data file (house.plans), not in this public shell */
+const PLANS = { basement: "", ground: "", first: "" };
+function planSrc(key) { return (S.house.plans && S.house.plans[key]) || PLANS[key] || ""; }
+function openPlan(i) {
+  const f = S.house.floors[i];
+  if (!f || !planSrc(f.plan)) return;
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal" style="max-width:960px;padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h2 style="margin:0">${esc(f.title)}</h2>
+      <button class="btn ghost sm" onclick="closeModal()">Close</button>
+    </div>
+    <img src="${planSrc(f.plan)}" alt="${esc(f.title)} floor plan" style="width:100%;border-radius:12px;border:1px solid var(--line-soft)">
+  </div></div>`;
+}
+
+/* ---------- House: measurements + checklist ---------- */
+function kvRows(pairs) {
+  return `<div class="kv">` + pairs.map(([k, v]) =>
+    `<div class="kv-row"><span>${esc(k)}</span><b class="num">${esc(v)}</b></div>`).join("") + `</div>`;
+}
+function renderHouse() {
+  document.getElementById("houseInfo").innerHTML = kvRows(S.house.info);
+  document.getElementById("houseRooms").innerHTML = S.house.floors.map(f =>
+    `<div class="eyebrow" style="margin-top:10px">${esc(f.title)}</div>` + kvRows(f.rooms)).join("");
+  document.getElementById("houseProjects").innerHTML = kvRows(S.house.projects);
+  document.getElementById("housePlans").innerHTML = S.house.floors.map((f, i) => `
+    <div class="card" style="padding:14px">
+      ${planSrc(f.plan)
+        ? `<img src="${planSrc(f.plan)}" alt="${esc(f.title)} floor plan" loading="lazy" style="width:100%;border-radius:10px;border:1px solid var(--line-soft);cursor:zoom-in" onclick="openPlan(${i})">`
+        : `<div style="height:120px;border-radius:10px;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink-faint);font-size:12.5px;text-align:center;padding:10px">Plan image loads from your private data file</div>`}
+      <h3 style="color:var(--forest);margin-top:10px">${esc(f.title)}</h3>
+      ${f.dims.length ? kvRows(f.dims) : ""}
+    </div>`).join("");
+  document.getElementById("houseAreas").innerHTML = S.house.areas.map((a, i) => `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <h3 style="color:var(--forest)">${esc(a.title)}</h3>
+        <button class="btn sm ghost" onclick="openAreaEdit(${i})">Edit</button>
+      </div>
+      ${kvRows(a.items)}
+    </div>`).join("");
+  renderChecklist();
+}
+function renderChecklist() {
+  const open = S.house.checklist.filter(c => !c.done);
+  const done = S.house.checklist.filter(c => c.done);
+  const crit = open.filter(c => c.priority === "Critical").length;
+  document.getElementById("checkProgress").textContent =
+    done.length + " of " + S.house.checklist.length + " collected" + (crit ? " · " + crit + " critical still missing" : " · all critical measurements in");
+  const rooms = [...new Set(open.map(c => c.room))];
+  const rowHTML = c => `<div class="tl-item need-row">
+      <button class="need-check" onclick="tickChecklist('${c.id}')" title="Measured it" aria-label="Mark as measured"></button>
+      <span class="info"><span class="nm">${esc(c.name)}</span><span class="st">${esc(c.why)}</span></span>
+      <span class="chip ${c.priority === "Critical" ? "prio-High" : "prio-Low"}">${esc(c.priority)}</span>
+      <button class="btn sm ghost" onclick="deleteChecklistItem('${c.id}')" title="Remove">✕</button>
+    </div>`;
+  document.getElementById("checklistGroups").innerHTML =
+    (rooms.map(r => `<div class="tl-group"><h3>${esc(r)}<span class="cnt">${open.filter(c => c.room === r).length}</span></h3>
+      ${open.filter(c => c.room === r).map(rowHTML).join("")}</div>`).join("")
+    || `<div class="empty"><div class="big">Everything measured</div><div>Nothing left on the checklist — add new items above as projects evolve.</div></div>`)
+    + (done.length ? `<div class="tl-group"><h3>Collected<span class="cnt">${done.length}</span></h3>
+      ${done.map(c => `<div class="tl-item need-row" style="opacity:.75">
+        <span style="width:26px;text-align:center;color:var(--forest);font-weight:700">✓</span>
+        <span class="info"><span class="nm">${esc(c.name)} <span class="faint" style="font-weight:400">· ${esc(c.room)}</span></span>
+        <span class="st">${c.value ? esc(c.value) : "measured"}${c.dateDone ? " · " + fdate(c.dateDone) : ""}</span></span>
+        <button class="btn sm ghost" onclick="untickChecklist('${c.id}')">Undo</button>
+      </div>`).join("")}</div>` : "");
+}
+function tickChecklist(id) {
+  const c = S.house.checklist.find(x => x.id === id);
+  if (!c) return;
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal narrow" role="dialog" aria-modal="true">
+    <h2>Measured ✓</h2>
+    <div class="muted" style="margin:-8px 0 16px;font-size:13.5px">${esc(c.name)} · ${esc(c.room)}</div>
+    <div class="field"><label>Measurement <span class="opt">optional but recommended — e.g. "3120 mm" or "drain 400 mm from left wall"</span></label>
+    <input id="chk_value" placeholder="Value…" autofocus onkeydown="if(event.key==='Enter')confirmTick('${c.id}')"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn green" onclick="confirmTick('${c.id}')">Save</button>
+    </div>
+  </div></div>`;
+}
+function confirmTick(id) {
+  const c = S.house.checklist.find(x => x.id === id);
+  if (!c) return;
+  c.done = true;
+  c.value = document.getElementById("chk_value").value.trim();
+  c.dateDone = todayISO();
+  save(); closeModal(); renderChecklist();
+  toast(c.value ? "Saved — " + c.value : "Marked as measured");
+}
+function untickChecklist(id) {
+  const c = S.house.checklist.find(x => x.id === id);
+  if (!c) return;
+  c.done = false; c.dateDone = "";
+  save(); renderChecklist();
+}
+function addChecklistItem() {
+  const name = document.getElementById("chkName").value.trim();
+  if (!name) { toast("Name the measurement first", "warn"); return; }
+  S.house.checklist.push({
+    id: uid(), room: document.getElementById("chkRoom").value.trim() || "General",
+    name, why: "", priority: document.getElementById("chkPriority").value,
+    done: false, value: "", dateDone: "",
+  });
+  document.getElementById("chkName").value = "";
+  save(); renderChecklist();
+  toast("Added to checklist");
+}
+function deleteChecklistItem(id) {
+  const i = S.house.checklist.findIndex(x => x.id === id);
+  if (i >= 0) { S.house.checklist.splice(i, 1); save(); renderChecklist(); }
+}
+/* Area editor */
+function openAreaEdit(idx) {
+  const a = S.house.areas[idx];
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true">
+    <h2>Edit — ${esc(a.title)}</h2>
+    <div id="areaRows">${a.items.map(([k, v]) => `<div class="area-row">
+      <input class="ar-label" value="${esc(k)}" placeholder="Measurement">
+      <input class="ar-value" value="${esc(v)}" placeholder="Value">
+      <button class="btn sm ghost" onclick="this.parentElement.remove()" title="Remove">✕</button>
+    </div>`).join("")}</div>
+    <button class="btn sm" style="margin-top:6px" onclick="addAreaRow()">+ Add measurement</button>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="saveAreaEdit(${idx})">Save</button>
+    </div>
+  </div></div>`;
+}
+function addAreaRow() {
+  document.getElementById("areaRows").insertAdjacentHTML("beforeend",
+    `<div class="area-row"><input class="ar-label" placeholder="Measurement"><input class="ar-value" placeholder="Value"><button class="btn sm ghost" onclick="this.parentElement.remove()" title="Remove">✕</button></div>`);
+}
+function saveAreaEdit(idx) {
+  const rows = [];
+  document.querySelectorAll("#areaRows .area-row").forEach(r => {
+    const k = r.querySelector(".ar-label").value.trim(), v = r.querySelector(".ar-value").value.trim();
+    if (k || v) rows.push([k, v]);
+  });
+  S.house.areas[idx].items = rows;
+  save(); closeModal(); renderHouse();
+  toast("Measurements saved");
+}
+
+/* ---------- Admin: lists, theme, datalists ---------- */
+const LIST_DEFS = {
+  rooms:    { label: "Rooms",    dl: "dlRooms",    hint: "Suggested in Room fields" },
+  projects: { label: "Projects", dl: "dlProjects", hint: "Suggested in Project fields" },
+  stores:   { label: "Stores",   dl: "dlStores",   hint: "Suggested in Store fields" },
+  accounts: { label: "Accounts", dl: "dlAccounts", hint: "Suggested in Paid from / account" },
+};
+function rebuildDatalists() {
+  for (const [key, def] of Object.entries(LIST_DEFS)) {
+    const el = document.getElementById(def.dl);
+    if (el) el.innerHTML = (S.settings.lists[key] || []).map(v => `<option>${esc(v)}</option>`).join("");
+  }
+}
+function addListItem(key) {
+  const input = document.getElementById("add_" + key);
+  const v = input.value.trim();
+  if (!v) return;
+  const list = S.settings.lists[key];
+  if (list.some(x => x.toLowerCase() === v.toLowerCase())) { toast("Already in the list", "warn"); input.value = ""; return; }
+  list.push(v);
+  input.value = ""; input.focus();
+  save(); rebuildDatalists(); renderAdmin();
+  toast("Added to " + LIST_DEFS[key].label.toLowerCase());
+}
+function removeListItem(key, i) {
+  S.settings.lists[key].splice(i, 1);
+  save(); rebuildDatalists(); renderAdmin();
+}
+function applyTheme() {
+  document.documentElement.setAttribute("data-theme", S.settings.theme === "blue" ? "blue" : "");
+}
+function setTheme(t) {
+  S.settings.theme = t;
+  applyTheme(); save(); renderAdmin();
+  toast(t === "blue" ? "Blue-grey theme on" : "Sage theme on");
+}
+function renderAdmin() {
+  document.getElementById("themePick").innerHTML = [
+    ["sage", "Muted sage", "linear-gradient(135deg,#48695C,#7FA08C)"],
+    ["blue", "Blue-grey", "linear-gradient(135deg,#4A6478,#8CA1B3)"],
+  ].map(([t, label, grad]) => `<button class="theme-swatch${S.settings.theme === t ? " active" : ""}" onclick="setTheme('${t}')">
+    <span class="sw" style="background:${grad}"></span>${label}${S.settings.theme === t ? " ✓" : ""}</button>`).join("");
+  const b = S.settings.budgets;
+  document.getElementById("adminBudgets").innerHTML =
+    `Kitchen <b class="num">${kr(b.kitchen)}</b> · Interior <b class="num">${kr(b.interior)}</b> · Outdoor <b class="num">${kr(b.outdoor)}</b><br>` +
+    `Active <b class="num">${kr(ACTIVE_BUDGET)}</b> + buffer <b class="num">${kr(BUFFER)}</b> = <b class="num">${kr(TOTAL_CASH)}</b>`;
+  document.getElementById("adminLists").innerHTML = Object.entries(LIST_DEFS).map(([key, def]) => `
+    <div class="card">
+      <h3 style="color:var(--forest)">${def.label}</h3>
+      <div class="faint" style="font-size:12px;margin:2px 0 10px">${def.hint}</div>
+      <div>${(S.settings.lists[key] || []).map((v, i) =>
+        `<span class="admin-chip">${esc(v)}<button onclick="removeListItem('${key}',${i})" title="Remove" aria-label="Remove ${esc(v)}">✕</button></span>`).join("") || '<span class="faint" style="font-size:12.5px">Empty</span>'}</div>
+      <div class="admin-add">
+        <input id="add_${key}" placeholder="Add ${def.label.toLowerCase().replace(/s$/, "")}…" onkeydown="if(event.key==='Enter')addListItem('${key}')">
+        <button class="btn sm" onclick="addListItem('${key}')">Add</button>
+        ${key === "rooms" ? `<button class="btn sm ghost" onclick="openMeasurements()">📏 Measurements</button>` : ""}
+      </div>
+    </div>`).join("");
+}
+
+/* ---------- Data file on disk (File System Access API) ----------
+   The visible reno-hub-data.json becomes the source of truth.
+   localStorage remains a cache; no hidden storage is trusted alone. */
+const FS_SUPPORTED = typeof window !== "undefined" && "showSaveFilePicker" in window;
+let fsHandle = null, fsWriteTimer = null, fsLastSaved = null;
+
+function idbOpen() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open("hub-fs", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("handles");
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+async function idbSet(k, v) {
+  const db = await idbOpen();
+  return new Promise((res, rej) => {
+    const tx = db.transaction("handles", "readwrite");
+    tx.objectStore("handles").put(v, k);
+    tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error);
+  });
+}
+async function idbGet(k) {
+  const db = await idbOpen();
+  return new Promise((res, rej) => {
+    const tx = db.transaction("handles", "readonly");
+    const rq = tx.objectStore("handles").get(k);
+    rq.onsuccess = () => res(rq.result || null); rq.onerror = () => rej(rq.error);
+  });
+}
+function updateFileStatus(state) {
+  const el = document.getElementById("fileStatus");
+  if (!el || !FS_SUPPORTED) return;
+  el.style.display = "";
+  el.classList.remove("stale");
+  if (state === "connected") {
+    el.textContent = "Data file ✓" + (fsLastSaved ? " " + fsLastSaved.toLocaleTimeString("nb-NO", { hour: "2-digit", minute: "2-digit" }) : "");
+    el.title = "Every change saves automatically to your data file. Click to save now.";
+  } else if (state === "prompt") {
+    el.textContent = "Reconnect data file";
+    el.classList.add("stale");
+    el.title = "Chrome needs one click to re-allow access to your data file.";
+  } else if (state === "error") {
+    el.textContent = "File save failed";
+    el.classList.add("stale");
+    el.title = "Could not write to the data file — click to retry or reconnect.";
+  } else {
+    el.textContent = "Set up data file";
+    el.classList.add("stale");
+    el.title = "Save all data to a visible file on your disk — recommended.";
+  }
+  el.dataset.state = state;
+}
+async function writeToFileNow() {
+  if (!fsHandle) return;
+  try {
+    const w = await fsHandle.createWritable();
+    await w.write(JSON.stringify(S, null, 2));
+    await w.close();
+    fsLastSaved = new Date();
+    updateFileStatus("connected");
+  } catch (e) { console.error("File write failed", e); updateFileStatus("error"); }
+}
+function scheduleFileWrite() {
+  if (!fsHandle) return;
+  clearTimeout(fsWriteTimer);
+  fsWriteTimer = setTimeout(writeToFileNow, 600);
+}
+async function loadFromHandle(handle) {
+  const f = await handle.getFile();
+  const txt = await f.text();
+  if (!txt.trim()) return null;
+  const d = JSON.parse(txt);
+  if (!d || !Array.isArray(d.purchases) || !Array.isArray(d.watchlist)) throw new Error("Not a Reno Hub data file");
+  return migrate(d);
+}
+function adoptData(d) {
+  S = d;
+  refreshBudgetGlobals(); rebuildDatalists(); applyTheme();
+  _skipBackupCount = true; save(); _skipBackupCount = false;
+  render();
+}
+function itemCount(d) { return d.purchases.length + d.watchlist.length + d.needs.length; }
+async function fsCreateNew() {
+  try {
+    const h = await showSaveFilePicker({ suggestedName: "reno-hub-data.json",
+      types: [{ description: "Reno Hub data", accept: { "application/json": [".json"] } }] });
+    fsHandle = h; await idbSet("data", h);
+    await writeToFileNow();
+    closeModal(); updateFileStatus("connected");
+    toast("Data file created — every change now saves to it automatically");
+  } catch (e) { if (e.name !== "AbortError") toast("Could not create file: " + e.message, "warn"); }
+}
+async function fsOpenExisting() {
+  try {
+    const [h] = await showOpenFilePicker({ types: [{ description: "Reno Hub data", accept: { "application/json": [".json"] } }] });
+    const d = await loadFromHandle(h);
+    fsHandle = h; await idbSet("data", h);
+    if (d) adoptData(d); else await writeToFileNow();
+    closeModal(); updateFileStatus("connected");
+    toast("Data file connected" + (d ? " — data loaded from it" : ""));
+  } catch (e) { if (e.name !== "AbortError") toast("Could not open file: " + e.message, "warn"); }
+}
+function openFsConnect() {
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal narrow" role="dialog" aria-modal="true">
+    <h2>Save to a real file</h2>
+    <p class="muted" style="font-size:13.5px;line-height:1.6;margin-bottom:16px">Instead of trusting hidden browser storage, the app can save everything to a visible <b>reno-hub-data.json</b> on your disk — automatically, on every change. Put it in the same folder as this app. Nothing can silently delete it.</p>
+    <div style="display:grid;gap:10px">
+      <button class="btn primary" style="justify-content:center;padding:13px" onclick="fsCreateNew()">Create new data file</button>
+      <button class="btn" style="justify-content:center;padding:13px" onclick="fsOpenExisting()">Open existing data file</button>
+    </div>
+    <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Not now</button></div>
+  </div></div>`;
+}
+function openFsConflict(fileData) {
+  const fc = itemCount(fileData), lc = itemCount(S);
+  modalRoot.innerHTML = `<div class="modal-backdrop"><div class="modal narrow" role="dialog" aria-modal="true">
+    <h2>Which data should win?</h2>
+    <p class="muted" style="font-size:13.5px;line-height:1.6">Your data file and this browser have different contents:<br>
+    <b>Data file:</b> ${fc} items · <b>This browser:</b> ${lc} items</p>
+    <div style="display:grid;gap:10px;margin-top:14px">
+      <button class="btn primary" style="justify-content:center" id="fsUseFile">Use the data file (${fc} items)</button>
+      <button class="btn" style="justify-content:center" id="fsUseLocal">Use this browser's data (${lc} items) — overwrites the file</button>
+    </div>
+    <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Decide later</button></div>
+  </div></div>`;
+  document.getElementById("fsUseFile").addEventListener("click", () => { adoptData(fileData); closeModal(); updateFileStatus("connected"); toast("Loaded from data file"); });
+  document.getElementById("fsUseLocal").addEventListener("click", async () => { await writeToFileNow(); closeModal(); toast("Data file overwritten with this browser's data"); });
+}
+async function fsAdoptAfterPermission() {
+  const fileData = await loadFromHandle(fsHandle);
+  if (!fileData) { await writeToFileNow(); return; }
+  const fc = itemCount(fileData), lc = itemCount(S);
+  if (lc === 0 || fc === lc) { adoptData(fileData); }
+  else { openFsConflict(fileData); return; }
+  updateFileStatus("connected");
+}
+async function fsReconnect() {
+  try {
+    const perm = await fsHandle.requestPermission({ mode: "readwrite" });
+    if (perm !== "granted") { updateFileStatus("prompt"); return; }
+    await fsAdoptAfterPermission();
+    toast("Data file reconnected");
+  } catch (e) { toast("Reconnect failed: " + e.message, "warn"); updateFileStatus("error"); }
+}
+async function initFileStore() {
+  if (!FS_SUPPORTED) return;
+  updateFileStatus("none");
+  try { fsHandle = await idbGet("data"); } catch (e) { fsHandle = null; }
+  if (!fsHandle) return;
+  let perm = "prompt";
+  try { perm = await fsHandle.queryPermission({ mode: "readwrite" }); } catch (e) {}
+  if (perm === "granted") {
+    try { await fsAdoptAfterPermission(); } catch (e) { updateFileStatus("error"); }
+  } else {
+    updateFileStatus("prompt");
+  }
+}
+if (FS_SUPPORTED) {
+  document.getElementById("fileStatus").addEventListener("click", () => {
+    const st = document.getElementById("fileStatus").dataset.state;
+    if (st === "connected") { writeToFileNow(); toast("Saved to data file"); }
+    else if (st === "prompt" && fsHandle) { fsReconnect(); }
+    else if (st === "error" && fsHandle) { writeToFileNow(); }
+    else { openFsConnect(); }
+  });
+}
+
+/* ---------- Init ---------- */
+refreshBudgetGlobals();
+rebuildDatalists();
+applyTheme();
+updateBackupStatus();
+initFileStore();
+render();
+</script>
+</body>
+</html>
