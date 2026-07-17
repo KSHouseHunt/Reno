@@ -387,6 +387,7 @@ details.pay-details .inner{margin-top:12px;display:grid;grid-template-columns:1f
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       <input id="globalSearch" type="search" placeholder="Search items, stores, rooms…" aria-label="Global search">
     </div>
+    <button class="backup-pill stale" id="cloudStatus" title="Supabase cloud sync">Cloud: connecting…</button>
     <button class="backup-pill" id="fileStatus" style="display:none" title="Data file"></button>
     <button class="backup-pill" id="backupStatus" title="Click to export a backup now"></button>
     <button class="btn ghost" id="btnExport">Export JSON</button>
@@ -646,11 +647,20 @@ details.pay-details .inner{margin-top:12px;display:grid;grid-template-columns:1f
 "use strict";
 /* =========================================================
    Reno Hub — standalone renovation budget & watchlist
-   Storage: localStorage only. Schema versioned for future
+   Storage: Supabase cloud sync with localStorage offline cache. Schema versioned for future
    price-history / Prisjakt / reminder integrations.
    ========================================================= */
 
 const LS_KEY = "heddekroken_hub_v1";
+
+/* Supabase cloud sync */
+const SUPABASE_URL = "https://lrvcwskmkxtzxlsfdjfb.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Gf7dmkf-jG46LIYJK19BMQ_bv02IJ3q";
+const SUPABASE_TABLE = "app_data";
+const SUPABASE_ROW_ID = "reno-hub";
+let cloudSaveTimer = null;
+let cloudReady = false;
+let cloudSaving = false;
 
 const SCHEMA = 9;
 const CAT_DEFS = {
@@ -835,6 +845,7 @@ function save() {
   catch (e) { toast("Could not save — storage may be full. Export a backup and remove large photos.", "warn"); }
   if (typeof updateBackupStatus === "function") updateBackupStatus();
   if (typeof scheduleFileWrite === "function") scheduleFileWrite();
+  scheduleCloudSave();
 }
 function markExported() {
   S.meta = S.meta || {};
@@ -843,6 +854,79 @@ function markExported() {
   _skipBackupCount = true; save(); _skipBackupCount = false;
 }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+
+/* ---------- Supabase cloud sync ---------- */
+function updateCloudStatus(state, detail = "") {
+  const el = document.getElementById("cloudStatus");
+  if (!el) return;
+  el.classList.toggle("stale", state !== "saved");
+  const labels = {
+    loading: "Cloud: loading…",
+    saving: "Cloud: saving…",
+    saved: "Cloud: saved ✓",
+    offline: "Cloud: offline",
+    error: "Cloud: error"
+  };
+  el.textContent = labels[state] || "Cloud";
+  el.title = detail || "Supabase cloud sync";
+}
+async function cloudRequest(path, options = {}) {
+  const headers = Object.assign({
+    "apikey": SUPABASE_KEY,
+    "Authorization": "Bearer " + SUPABASE_KEY,
+    "Content-Type": "application/json"
+  }, options.headers || {});
+  const r = await fetch(SUPABASE_URL + "/rest/v1/" + path, Object.assign({}, options, { headers }));
+  if (!r.ok) throw new Error((await r.text()) || ("HTTP " + r.status));
+  return r.status === 204 ? null : await r.json();
+}
+async function loadFromCloud() {
+  updateCloudStatus("loading");
+  try {
+    const rows = await cloudRequest(SUPABASE_TABLE + "?id=eq." + encodeURIComponent(SUPABASE_ROW_ID) + "&select=data,updated_at");
+    if (rows && rows.length && rows[0].data && Array.isArray(rows[0].data.watchlist) && Array.isArray(rows[0].data.purchases)) {
+      S = migrate(rows[0].data);
+      try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) {}
+    } else {
+      // First run, or the SQL-created placeholder row still contains {}.
+      // Keep the browser state and promote it to the cloud instead of replacing it.
+      await saveToCloudNow();
+    }
+    cloudReady = true;
+    updateCloudStatus("saved");
+  } catch (e) {
+    console.error("Cloud load failed", e);
+    cloudReady = false;
+    updateCloudStatus(navigator.onLine ? "error" : "offline", e.message);
+    toast("Cloud sync unavailable — using this browser's saved copy", "warn");
+  }
+}
+async function saveToCloudNow() {
+  if (cloudSaving) return;
+  cloudSaving = true;
+  updateCloudStatus("saving");
+  try {
+    await cloudRequest(SUPABASE_TABLE + "?on_conflict=id", {
+      method: "POST",
+      headers: { "Prefer": "resolution=merge-duplicates,return=minimal" },
+      body: JSON.stringify({ id: SUPABASE_ROW_ID, data: S, updated_at: new Date().toISOString() })
+    });
+    cloudReady = true;
+    updateCloudStatus("saved");
+  } catch (e) {
+    console.error("Cloud save failed", e);
+    cloudReady = false;
+    updateCloudStatus(navigator.onLine ? "error" : "offline", e.message);
+  } finally {
+    cloudSaving = false;
+  }
+}
+function scheduleCloudSave() {
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer = setTimeout(saveToCloudNow, 700);
+}
+window.addEventListener("online", () => { updateCloudStatus("saving"); saveToCloudNow(); });
+window.addEventListener("offline", () => updateCloudStatus("offline"));
 
 /* ---------- Formatting ---------- */
 const nf = new Intl.NumberFormat("nb-NO", { maximumFractionDigits: 0 });
@@ -2415,12 +2499,16 @@ if (FS_SUPPORTED) {
 }
 
 /* ---------- Init ---------- */
-refreshBudgetGlobals();
-rebuildDatalists();
-applyTheme();
-updateBackupStatus();
-initFileStore();
-render();
+async function initApp() {
+  await loadFromCloud();
+  refreshBudgetGlobals();
+  rebuildDatalists();
+  applyTheme();
+  updateBackupStatus();
+  initFileStore();
+  render();
+}
+initApp();
 </script>
 </body>
 </html>
